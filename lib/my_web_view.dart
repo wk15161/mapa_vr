@@ -39,6 +39,12 @@ class MyWebViewState extends ConsumerState<MyWebView> {
 
       if (currentUrl!.contains(_urlModoRV)) {
         print("El texto principal si existeeee");
+
+        _controller.runJavaScript('''
+            // Aquí puedes colocar el código JavaScript que deseas ejecutar
+            console.log("La página ha terminado de cargar");
+          ''');
+
         await Future.delayed(
           const Duration(seconds: 2),
         ); // tiempo que debe pasar para después continuar con la actualización del provider

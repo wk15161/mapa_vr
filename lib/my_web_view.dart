@@ -161,7 +161,7 @@ class MyWebViewState extends ConsumerState<MyWebView> {
       child: Scaffold(
         body: Stack(
           children: [
-            _widget.ventanaNavegadorBasico(true, _controller!),
+            _widget.ventanaNavegadorBasico(false, _controller!),
             _widget.circuloProgreso(false),
           ],
         ),

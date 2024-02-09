@@ -49,9 +49,6 @@ class MyWebViewState extends ConsumerState<MyWebView> {
 
           if (currentUrl.contains(_urlModoRV)) {
             print("El texto principal si existeeee");
-            if (!ref.watch(mostrarPantallaCarga)) {
-              ref.read(mostrarPantallaCarga.notifier).update((state) => true);
-            }
 
             // // Ejecutar algo cada 5 segundos
             // Timer.periodic(Duration(seconds: _tiempo), (Timer timer) async {
@@ -92,6 +89,8 @@ class MyWebViewState extends ConsumerState<MyWebView> {
               const Duration(seconds: 3),
             ); // tiempo que debe pasar para después continuar con la actualización del provider
             if (ref.watch(visibleBotonRV) == false) {
+              ref.read(mostrarPantallaCarga.notifier).update((state) => true);
+
               ref.read(visibleBotonRV.notifier).update((state) => true);
               for (int f = 0; f < 2; f++) {
                 while (true) {
@@ -162,9 +161,8 @@ class MyWebViewState extends ConsumerState<MyWebView> {
       child: Scaffold(
         body: Stack(
           children: [
-            _widget.ventanaNavegadorBasico(
-                _mostrarBarraProgresoProvider, _controller!),
-            _widget.circuloProgreso(_mostrarBarraProgresoProvider),
+            _widget.ventanaNavegadorBasico(true, _controller!),
+            _widget.circuloProgreso(false),
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,

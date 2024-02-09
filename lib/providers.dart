@@ -7,3 +7,9 @@ final AutoDisposeStateProvider<bool> visibleBotonRV =
   bool _valor = false;
   return _valor;
 });
+
+final AutoDisposeStateProvider<bool> mostrarPantallaCarga =
+    StateProvider.autoDispose<bool>((ref) {
+  bool _valor = false;
+  return _valor;
+});

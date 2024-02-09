@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, no_leading_underscores_for_local_identifiers
+// ignore_for_file: avoid_print, no_leading_underscores_for_local_identifiers, unused_element
 
 import 'dart:async';
 
@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fullscreen_window/fullscreen_window.dart';
+import 'package:proyect/widgets_pantalla.dart';
 import 'package:proyect/providers.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -15,6 +16,9 @@ const String _urlModoRV = 'https://netrabbitonline.shop/mapavr/vr.php?';
 const String _direccionURL1 = 'https://netrabbitonline.shop/mapavr/vr.php?id=4';
 
 WebViewController? _controller;
+int _tiempo = 1;
+//clase de la pantalla de carga
+WidgetsPantalla _widget = WidgetsPantalla();
 
 //Clase "MyWebView" utilizada para cargar una vista de navegador web clásico Android con la dirección URL
 class MyWebView extends ConsumerStatefulWidget {
@@ -45,6 +49,38 @@ class MyWebViewState extends ConsumerState<MyWebView> {
 
           if (currentUrl.contains(_urlModoRV)) {
             print("El texto principal si existeeee");
+            if (!ref.watch(mostrarPantallaCarga)) {
+              ref.read(mostrarPantallaCarga.notifier).update((state) => true);
+            }
+
+            // // Ejecutar algo cada 5 segundos
+            // Timer.periodic(Duration(seconds: _tiempo), (Timer timer) async {
+            //   print("Ejecutando cada segundo");
+
+            //   String _verificando =
+            //       await _controller!.runJavaScriptReturningResult('''
+            //     // Obtiene el elemento por su clase
+            //     var vrButtonContainer = document.querySelector('.a-enter-vr.fullscreen');
+            //     var vrButtonContainer2 = document.querySelector('.a-enter-vr.a-hidden');
+
+            //         if (!vrButtonContainer && !vrButtonContainer2) {
+            //           console.log("true");
+            //        }
+
+            //     ''').then((value) {
+            //     print(
+            //         "se ejecutó bieeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeen :D");
+            //     return value.toString();
+            //   }).onError((error, stackTrace) {
+            //     print(
+            //         "ocurrió un errooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooor");
+            //     return "";
+            //   });
+
+            //   if (_verificando.isNotEmpty) {
+            //     print("valorcito eees: $_verificando");
+            //   }
+            // });
 
             // Configura la orientación a lateral
             await SystemChrome.setPreferredOrientations([
@@ -88,9 +124,14 @@ class MyWebViewState extends ConsumerState<MyWebView> {
                   }
                 }
               }
+              ref.read(mostrarPantallaCarga.notifier).update((state) => false);
             }
           } else {
             if (ref.watch(visibleBotonRV) == true) {
+              _tiempo = 100000;
+              await Future.delayed(
+                const Duration(seconds: 1),
+              ); // tiempo que debe pasar para después continuar con la actualización del provider
               ref.read(visibleBotonRV.notifier).update((state) => false);
 
               // Cambia la orientación de nuevo a vertical
@@ -115,10 +156,17 @@ class MyWebViewState extends ConsumerState<MyWebView> {
     // Obtiene el tamaño de la pantalla
     // final Size _screenSize = MediaQuery.of(context).size;
     // bool _visibilidadProvider = ref.watch(visibleBotonRV);
+    bool _mostrarBarraProgresoProvider = ref.watch(mostrarPantallaCarga);
     return SafeArea(
       minimum: const EdgeInsets.all(0),
       child: Scaffold(
-        body: WebViewWidget(controller: _controller!),
+        body: Stack(
+          children: [
+            _widget.ventanaNavegadorBasico(
+                _mostrarBarraProgresoProvider, _controller!),
+            _widget.circuloProgreso(_mostrarBarraProgresoProvider),
+          ],
+        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
         floatingActionButton: const Text(""),
       ),

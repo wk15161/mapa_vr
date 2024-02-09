@@ -46,19 +46,20 @@ class MyWebViewState extends ConsumerState<MyWebView> {
           if (currentUrl.contains(_urlModoRV)) {
             print("El texto principal si existeeee");
 
-            // // Configura la orientación a lateral
-            // await SystemChrome.setPreferredOrientations([
-            //   DeviceOrientation.landscapeLeft,
-            //   DeviceOrientation.landscapeRight,
-            // ]);
+            // Configura la orientación a lateral
+            await SystemChrome.setPreferredOrientations([
+              DeviceOrientation.landscapeLeft,
+              DeviceOrientation.landscapeRight,
+            ]);
 
             await Future.delayed(
-              const Duration(seconds: 4),
+              const Duration(seconds: 3),
             ); // tiempo que debe pasar para después continuar con la actualización del provider
             if (ref.watch(visibleBotonRV) == false) {
               ref.read(visibleBotonRV.notifier).update((state) => true);
-              while (true) {
-                bool _valor = await _controller!.runJavaScript('''
+              for (int f = 0; f < 2; f++) {
+                while (true) {
+                  bool _valor = await _controller!.runJavaScript('''
                 // Obtiene el elemento por su clase
                 var vrButtonContainer = document.querySelector('.a-enter-vr.fullscreen');
                 var vrButtonContainer2 = document.querySelector('.a-enter-vr.a-hidden');
@@ -74,16 +75,17 @@ class MyWebViewState extends ConsumerState<MyWebView> {
 	                //alert("removido con exitooo 2");
                    }
                 ''').then((value) {
-                  print(
-                      "se ejecutó bieeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeen :D");
-                  return true;
-                }).onError((error, stackTrace) {
-                  print(
-                      "ocurrió un errooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooor");
-                  return false;
-                });
-                if (_valor) {
-                  break;
+                    print(
+                        "se ejecutó bieeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeen :D");
+                    return true;
+                  }).onError((error, stackTrace) {
+                    print(
+                        "ocurrió un errooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooor");
+                    return false;
+                  });
+                  if (_valor) {
+                    break;
+                  }
                 }
               }
             }
@@ -91,11 +93,11 @@ class MyWebViewState extends ConsumerState<MyWebView> {
             if (ref.watch(visibleBotonRV) == true) {
               ref.read(visibleBotonRV.notifier).update((state) => false);
 
-              // // Cambia la orientación de nuevo a vertical
-              // await SystemChrome.setPreferredOrientations([
-              //   DeviceOrientation.portraitUp,
-              //   DeviceOrientation.portraitDown,
-              // ]);
+              // Cambia la orientación de nuevo a vertical
+              await SystemChrome.setPreferredOrientations([
+                DeviceOrientation.portraitUp,
+                DeviceOrientation.portraitDown,
+              ]);
             }
           }
         },

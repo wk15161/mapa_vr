@@ -39,6 +39,8 @@ dependencies:
   fullscreen_window: ^1.0.4
   flutter_riverpod: ^2.4.10
 
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

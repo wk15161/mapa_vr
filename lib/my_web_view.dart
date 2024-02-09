@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fullscreen_window/fullscreen_window.dart';
 import 'package:proyect/providers.dart';
@@ -11,6 +12,9 @@ import 'package:webview_flutter/webview_flutter.dart';
 //Variable con la dirección URL
 const String _direccionURL = 'https://netrabbitonline.shop/mapavr/';
 const String _urlModoRV = 'https://netrabbitonline.shop/mapavr/vr.php?';
+const String _direccionURL1 = 'https://netrabbitonline.shop/mapavr/vr.php?id=4';
+
+WebViewController? _controller;
 
 //Clase "MyWebView" utilizada para cargar una vista de navegador web clásico Android con la dirección URL
 class MyWebView extends ConsumerStatefulWidget {
@@ -21,10 +25,6 @@ class MyWebView extends ConsumerStatefulWidget {
 }
 
 class MyWebViewState extends ConsumerState<MyWebView> {
-  // variable que establece el controlador de la vista Web (IMPORTANTE)
-  final _controller = WebViewController()
-    ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    ..loadRequest(Uri.parse(_direccionURL));
 //Esta función permite establecer estados o inicializar variables al terminar de cargar los widget
   @override
   void initState() {
@@ -32,31 +32,74 @@ class MyWebViewState extends ConsumerState<MyWebView> {
     //llama a la función para activar la pantalla completa
     setFullScreen(true);
 
-    Timer.periodic(const Duration(seconds: 1), (timer) async {
-      // Actualiza la interfaz de usuario con el tiempo transcurrido
-      var currentUrl = await _controller.currentUrl();
-      print("la variables en resultado es: $currentUrl");
+    // variable que establece el controlador de la vista Web (IMPORTANTE)
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(_direccionURL))
+      ..setNavigationDelegate(NavigationDelegate(
+        onUrlChange: (change) {
+          print("Ha cambiado la url");
+        },
+        onPageFinished: (currentUrl) async {
+          print("la url ($currentUrl) ha terminado de cargaaar");
 
-      if (currentUrl!.contains(_urlModoRV)) {
-        print("El texto principal si existeeee");
+          if (currentUrl.contains(_urlModoRV)) {
+            print("El texto principal si existeeee");
 
-        _controller.runJavaScript('''
-            // Aquí puedes colocar el código JavaScript que deseas ejecutar
-            console.log("La página ha terminado de cargar");
-          ''');
+            // // Configura la orientación a lateral
+            // await SystemChrome.setPreferredOrientations([
+            //   DeviceOrientation.landscapeLeft,
+            //   DeviceOrientation.landscapeRight,
+            // ]);
 
-        await Future.delayed(
-          const Duration(seconds: 2),
-        ); // tiempo que debe pasar para después continuar con la actualización del provider
-        if (ref.watch(visibleBotonRV) == false) {
-          ref.read(visibleBotonRV.notifier).update((state) => true);
-        }
-      } else {
-        if (ref.watch(visibleBotonRV) == true) {
-          ref.read(visibleBotonRV.notifier).update((state) => false);
-        }
-      }
-    });
+            await Future.delayed(
+              const Duration(seconds: 4),
+            ); // tiempo que debe pasar para después continuar con la actualización del provider
+            if (ref.watch(visibleBotonRV) == false) {
+              ref.read(visibleBotonRV.notifier).update((state) => true);
+              while (true) {
+                bool _valor = await _controller!.runJavaScript('''
+                // Obtiene el elemento por su clase
+                var vrButtonContainer = document.querySelector('.a-enter-vr.fullscreen');
+                var vrButtonContainer2 = document.querySelector('.a-enter-vr.a-hidden');
+    
+                // Remueve la clase 'fullscreen' del elemento si existe
+                    if (vrButtonContainer) {
+                        vrButtonContainer.classList.remove('fullscreen');
+                	//alert("removido con exitooo");
+                   }
+
+                   if (vrButtonContainer2) {
+                       vrButtonContainer2.classList.remove('a-hidden');
+	                //alert("removido con exitooo 2");
+                   }
+                ''').then((value) {
+                  print(
+                      "se ejecutó bieeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeen :D");
+                  return true;
+                }).onError((error, stackTrace) {
+                  print(
+                      "ocurrió un errooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooor");
+                  return false;
+                });
+                if (_valor) {
+                  break;
+                }
+              }
+            }
+          } else {
+            if (ref.watch(visibleBotonRV) == true) {
+              ref.read(visibleBotonRV.notifier).update((state) => false);
+
+              // // Cambia la orientación de nuevo a vertical
+              // await SystemChrome.setPreferredOrientations([
+              //   DeviceOrientation.portraitUp,
+              //   DeviceOrientation.portraitDown,
+              // ]);
+            }
+          }
+        },
+      ));
   }
 
 //Activa/desactiva la pantalla completa
@@ -67,17 +110,15 @@ class MyWebViewState extends ConsumerState<MyWebView> {
 //Función que retorna una función con nombre "build", esa función retorna una variable de tipo "Widget"
   @override
   Widget build(BuildContext context) {
-    bool _visibilidadProvider = ref.watch(visibleBotonRV);
+    // Obtiene el tamaño de la pantalla
+    // final Size _screenSize = MediaQuery.of(context).size;
+    // bool _visibilidadProvider = ref.watch(visibleBotonRV);
     return SafeArea(
+      minimum: const EdgeInsets.all(0),
       child: Scaffold(
-        body: WebViewWidget(controller: _controller),
-        floatingActionButton: Visibility(
-          visible: _visibilidadProvider,
-          child: FloatingActionButton(
-            onPressed: () async {},
-            child: const Text("RV"),
-          ),
-        ),
+        body: WebViewWidget(controller: _controller!),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
+        floatingActionButton: const Text(""),
       ),
     );
   }

@@ -155,7 +155,7 @@ class MyWebViewState extends ConsumerState<MyWebView> {
     // Obtiene el tamaño de la pantalla
     // final Size _screenSize = MediaQuery.of(context).size;
     // bool _visibilidadProvider = ref.watch(visibleBotonRV);
-    bool _mostrarBarraProgresoProvider = ref.watch(mostrarPantallaCarga);
+    // bool _mostrarBarraProgresoProvider = ref.watch(mostrarPantallaCarga);
     return SafeArea(
       minimum: const EdgeInsets.all(0),
       child: Scaffold(

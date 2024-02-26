@@ -24,4 +24,20 @@ class WidgetsPantalla {
       child: WebViewWidget(controller: controller!),
     );
   }
+
+  Future mostrarVentana(String message, BuildContext context) async {
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Aviso'),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('Aceptar'),
+          ),
+        ],
+      ),
+    );
+  }
 }

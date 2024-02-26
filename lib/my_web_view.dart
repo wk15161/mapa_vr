@@ -11,9 +11,12 @@ import 'package:proyect/providers.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 //Variable con la dirección URL
-const String _direccionURL = 'https://netrabbitonline.shop/mapavr/';
-const String _urlModoRV = 'https://netrabbitonline.shop/mapavr/vr.php?';
-const String _direccionURL1 = 'https://netrabbitonline.shop/mapavr/vr.php?id=4';
+const String _direccionURL = 'https://netrabbitonline.shop/travevr/';
+const String _urlModoRV = 'https://netrabbitonline.shop/travevr/vr.php?';
+const String _direccionURL1 =
+    'https://netrabbitonline.shop/travevr/vr.php?id=4';
+const String _direccionURLSalida =
+    "https://netrabbitonline.shop/travevr/index.php?s=1";
 
 WebViewController? _controller;
 int _tiempo = 1;
@@ -33,6 +36,8 @@ class MyWebViewState extends ConsumerState<MyWebView> {
   @override
   void initState() {
     super.initState();
+    bool existeGiroscopio = false;
+
     //llama a la función para activar la pantalla completa
     setFullScreen(true);
 
@@ -47,37 +52,34 @@ class MyWebViewState extends ConsumerState<MyWebView> {
         onPageFinished: (currentUrl) async {
           print("la url ($currentUrl) ha terminado de cargaaar");
 
+          if (!currentUrl.contains(_urlModoRV)) {
+            // Cambia la orientación de nuevo a vertical
+            await SystemChrome.setPreferredOrientations([
+              DeviceOrientation.portraitUp,
+              DeviceOrientation.portraitDown,
+            ]);
+
+            Object retVal1 = await _controller!
+                .runJavaScriptReturningResult("deviceHasGyroscope");
+
+            existeGiroscopio = bool.parse("$retVal1");
+
+            if (ref.watch(mostrarBotonSalida) == true) {
+              ref.read(mostrarBotonSalida.notifier).update((state) => false);
+            }
+
+            if (ref.watch(visibleBotonRV) == true) {
+              print("cambiando estoo");
+              _tiempo = 100000;
+              await Future.delayed(
+                const Duration(seconds: 1),
+              ); // tiempo que debe pasar para después continuar con la actualización del provider
+              ref.read(visibleBotonRV.notifier).update((state) => false);
+            }
+          }
+
           if (currentUrl.contains(_urlModoRV)) {
             print("El texto principal si existeeee");
-
-            // // Ejecutar algo cada 5 segundos
-            // Timer.periodic(Duration(seconds: _tiempo), (Timer timer) async {
-            //   print("Ejecutando cada segundo");
-
-            //   String _verificando =
-            //       await _controller!.runJavaScriptReturningResult('''
-            //     // Obtiene el elemento por su clase
-            //     var vrButtonContainer = document.querySelector('.a-enter-vr.fullscreen');
-            //     var vrButtonContainer2 = document.querySelector('.a-enter-vr.a-hidden');
-
-            //         if (!vrButtonContainer && !vrButtonContainer2) {
-            //           console.log("true");
-            //        }
-
-            //     ''').then((value) {
-            //     print(
-            //         "se ejecutó bieeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeen :D");
-            //     return value.toString();
-            //   }).onError((error, stackTrace) {
-            //     print(
-            //         "ocurrió un errooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooor");
-            //     return "";
-            //   });
-
-            //   if (_verificando.isNotEmpty) {
-            //     print("valorcito eees: $_verificando");
-            //   }
-            // });
 
             // Configura la orientación a lateral
             await SystemChrome.setPreferredOrientations([
@@ -93,11 +95,15 @@ class MyWebViewState extends ConsumerState<MyWebView> {
 
               ref.read(visibleBotonRV.notifier).update((state) => true);
               for (int f = 0; f < 2; f++) {
-                while (true) {
+                while (true && existeGiroscopio) {
                   bool _valor = await _controller!.runJavaScript('''
+
+
                 // Obtiene el elemento por su clase
                 var vrButtonContainer = document.querySelector('.a-enter-vr.fullscreen');
                 var vrButtonContainer2 = document.querySelector('.a-enter-vr.a-hidden');
+
+                var icon = document.getElementById("cursor");
     
                 // Remueve la clase 'fullscreen' del elemento si existe
                     if (vrButtonContainer) {
@@ -106,8 +112,32 @@ class MyWebViewState extends ConsumerState<MyWebView> {
                    }
 
                    if (vrButtonContainer2) {
+                    //creamos una nueva variable llamada
+
+                    
                        vrButtonContainer2.classList.remove('a-hidden');
 	                //alert("removido con exitooo 2");
+
+
+                    var nuevoDiv = document.createElement("div");
+
+                    // Asignar un ID al nuevo div
+                    nuevoDiv.id = "verBotonRV";
+
+                    // Puedes agregar más contenido o estilos al div si lo deseas
+                    nuevoDiv.innerHTML = "";
+
+                    // Insertar el nuevo div al final del body
+                    document.body.appendChild(nuevoDiv);
+
+                     
+                   }
+
+                   //removemos el cursor (PRUEBAA)
+
+                   if(icon){
+                    //icon.remove();
+                    //alert("removido con exitooo el icono...");
                    }
                 ''').then((value) {
                     print(
@@ -123,21 +153,38 @@ class MyWebViewState extends ConsumerState<MyWebView> {
                   }
                 }
               }
+
+              //primero guardamos el valor en una variable Javascript sobre si el botón existe o no
+              await _controller!.runJavaScript('''
+              var existeButon = false;
+              var buton1 = document.getElementById("verBotonRV");
+               if(buton1){
+                existeButon=true;
+               }else{
+                existeButon=false;
+               }
+              ''');
+
+              //hacemos una comprobación de si existe el boton de realidad virtual (servirá más adelante)
+              Object _resultado = await _controller!
+                  .runJavaScriptReturningResult("existeButon");
+
               ref.read(mostrarPantallaCarga.notifier).update((state) => false);
             }
-          } else {
-            if (ref.watch(visibleBotonRV) == true) {
-              _tiempo = 100000;
+
+            //si no se está mostrando la "x" de salida, entonces la mostraremos
+            if (ref.watch(mostrarBotonSalida) == false) {
+              ref.read(mostrarBotonSalida.notifier).update((state) => true);
+            }
+
+            if (!existeGiroscopio) {
               await Future.delayed(
                 const Duration(seconds: 1),
-              ); // tiempo que debe pasar para después continuar con la actualización del provider
-              ref.read(visibleBotonRV.notifier).update((state) => false);
+              );
 
-              // Cambia la orientación de nuevo a vertical
-              await SystemChrome.setPreferredOrientations([
-                DeviceOrientation.portraitUp,
-                DeviceOrientation.portraitDown,
-              ]);
+              _widget.mostrarVentana(
+                  "El teléfono no es compatible con Realidad Virtual...",
+                  context);
             }
           }
         },
@@ -156,18 +203,34 @@ class MyWebViewState extends ConsumerState<MyWebView> {
     // final Size _screenSize = MediaQuery.of(context).size;
     // bool _visibilidadProvider = ref.watch(visibleBotonRV);
     // bool _mostrarBarraProgresoProvider = ref.watch(mostrarPantallaCarga);
+    bool _mostrarBotonSalidaProvider = ref.watch(mostrarBotonSalida);
+
     return SafeArea(
       minimum: const EdgeInsets.all(0),
       child: Scaffold(
-        body: Stack(
-          children: [
-            _widget.ventanaNavegadorBasico(false, _controller!),
-            _widget.circuloProgreso(false),
-          ],
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
-        floatingActionButton: const Text(""),
-      ),
+          body: Stack(
+            children: [
+              _widget.ventanaNavegadorBasico(false, _controller!),
+              _widget.circuloProgreso(false),
+            ],
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.miniStartTop,
+          floatingActionButton: Visibility(
+            visible: _mostrarBotonSalidaProvider,
+            child: IconButton(
+              onPressed: () async {
+                print("saliendo");
+                // Cambiar la URL del WebView
+                await _controller?.loadRequest(Uri.parse(_direccionURLSalida));
+              },
+              icon: Icon(
+                Icons.close,
+                size: 40,
+                color: Colors.white,
+              ),
+            ),
+          )),
     );
   }
 }

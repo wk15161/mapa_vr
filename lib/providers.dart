@@ -13,3 +13,9 @@ final AutoDisposeStateProvider<bool> mostrarPantallaCarga =
   bool _valor = false;
   return _valor;
 });
+
+final AutoDisposeStateProvider<bool> mostrarBotonSalida =
+    StateProvider.autoDispose<bool>((ref) {
+  bool _valor = false;
+  return _valor;
+});

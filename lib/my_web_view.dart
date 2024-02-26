@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, no_leading_underscores_for_local_identifiers, unused_element
+// ignore_for_file: avoid_print, no_leading_underscores_for_local_identifiers, unused_element, unused_local_variable, use_build_context_synchronously
 
 import 'dart:async';
 
@@ -224,7 +224,7 @@ class MyWebViewState extends ConsumerState<MyWebView> {
                 // Cambiar la URL del WebView
                 await _controller?.loadRequest(Uri.parse(_direccionURLSalida));
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.close,
                 size: 40,
                 color: Colors.white,

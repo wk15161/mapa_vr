@@ -218,17 +218,30 @@ class MyWebViewState extends ConsumerState<MyWebView> {
               FloatingActionButtonLocation.miniStartTop,
           floatingActionButton: Visibility(
             visible: _mostrarBotonSalidaProvider,
-            child: IconButton(
-              onPressed: () async {
-                print("saliendo");
-                // Cambiar la URL del WebView
-                await _controller?.loadRequest(Uri.parse(_direccionURLSalida));
-              },
-              icon: const Icon(
-                Icons.close,
-                size: 40,
-                color: Colors.white,
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                _widget.botonPruebas(_mostrarBotonSalidaProvider, _controller),
+                IconButton(
+                  onPressed: () async {
+                    print("saliendo");
+                    // Cambiar la URL del WebView
+                    await _controller
+                        ?.loadRequest(Uri.parse(_direccionURLSalida));
+                  },
+                  icon: const Icon(
+                    Icons.close,
+                    size: 40,
+                    color: Colors.white,
+                  ),
+                ),
+                _widget.botonAgregarCursor(
+                    _mostrarBotonSalidaProvider, _controller),
+                _widget.botonQuitarCursor(
+                    _mostrarBotonSalidaProvider, _controller),
+                _widget.imprimirCodigoFuente(
+                    _mostrarBotonSalidaProvider, _controller),
+              ],
             ),
           )),
     );

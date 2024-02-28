@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, no_leading_underscores_for_local_identifiers, unused_element, unused_local_variable, use_build_context_synchronously
+// ignore_for_file: avoid_print, no_leading_underscores_for_local_identifiers, unused_element, unused_local_variable, use_build_context_synchronously, unnecessary_brace_in_string_interps
 
 import 'dart:async';
 
@@ -46,11 +46,10 @@ class MyWebViewState extends ConsumerState<MyWebView> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(Uri.parse(_direccionURL))
       ..setNavigationDelegate(NavigationDelegate(
-        onUrlChange: (change) {
-          print("Ha cambiado la url");
-        },
+        onUrlChange: (change) {},
         onPageFinished: (currentUrl) async {
-          print("la url ($currentUrl) ha terminado de cargaaar");
+          print(
+              "la url ($currentUrl) ha terminado de cargaaarrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
 
           if (!currentUrl.contains(_urlModoRV)) {
             // Cambia la orientación de nuevo a vertical
@@ -81,42 +80,60 @@ class MyWebViewState extends ConsumerState<MyWebView> {
           if (currentUrl.contains(_urlModoRV)) {
             print("El texto principal si existeeee");
 
-            // Configura la orientación a lateral
-            await SystemChrome.setPreferredOrientations([
-              DeviceOrientation.landscapeLeft,
-              DeviceOrientation.landscapeRight,
-            ]);
+            //sino existe esa variable entonces la imprimimos
+            if (!currentUrl.contains("appMovil=1")) {
+              // esto recarga la página junto con una variable get
+              await _controller
+                  ?.loadRequest(Uri.parse("${currentUrl}&appMovil=1"));
+            } else {
+              // Configura la orientación a lateral
+              await SystemChrome.setPreferredOrientations([
+                DeviceOrientation.landscapeLeft,
+                DeviceOrientation.landscapeRight,
+              ]);
 
-            await Future.delayed(
-              const Duration(seconds: 3),
-            ); // tiempo que debe pasar para después continuar con la actualización del provider
-            if (ref.watch(visibleBotonRV) == false) {
-              ref.read(mostrarPantallaCarga.notifier).update((state) => true);
+              await Future.delayed(
+                const Duration(seconds: 3),
+              ); // tiempo que debe pasar para después continuar con la actualización del provider
+              if (ref.watch(visibleBotonRV) == false) {
+                ref.read(mostrarPantallaCarga.notifier).update((state) => true);
 
-              ref.read(visibleBotonRV.notifier).update((state) => true);
-              for (int f = 0; f < 2; f++) {
-                while (true && existeGiroscopio) {
-                  bool _valor = await _controller!.runJavaScript('''
+                ref.read(visibleBotonRV.notifier).update((state) => true);
+                for (int f = 0; f < 2; f++) {
+                  while (true && existeGiroscopio) {
+                    bool _valor = await _controller!.runJavaScript('''
 
 
                 // Obtiene el elemento por su clase
                 var vrButtonContainer = document.querySelector('.a-enter-vr.fullscreen');
                 var vrButtonContainer2 = document.querySelector('.a-enter-vr.a-hidden');
+                 var miEscena = document.querySelector('a-scene');
 
                 var icon = document.getElementById("cursor");
     
-                // Remueve la clase 'fullscreen' del elemento si existe
-                    if (vrButtonContainer) {
-                        vrButtonContainer.classList.remove('fullscreen');
-                	//alert("removido con exitooo");
-                   }
+                
 
+
+                  // Remueve la clase 'fullscreen' del elemento si existe
+                    if (vrButtonContainer) {
+                      vrButtonContainer.classList.remove('fullscreen');
+                	    //alert("removido con exitooo");
+                   }
+                  
+                  // Remueve la clase 'a-hidden' del elemento si existe
                    if (vrButtonContainer2) {
                     //creamos una nueva variable llamada
+                    vrButtonContainer2.classList.remove('a-hidden');
+	                  //alert("removido con exitooo 2");
+                   }
 
-                    
-                       vrButtonContainer2.classList.remove('a-hidden');
-	                //alert("removido con exitooo 2");
+                   //removemos el cursor (PRUEBAA)
+
+                   if(icon){
+                    //icon.remove();
+                    //alert("removido con exitooo el icono...");
+                   }
+
 
 
                     var nuevoDiv = document.createElement("div");
@@ -130,32 +147,23 @@ class MyWebViewState extends ConsumerState<MyWebView> {
                     // Insertar el nuevo div al final del body
                     document.body.appendChild(nuevoDiv);
 
-                     
-                   }
-
-                   //removemos el cursor (PRUEBAA)
-
-                   if(icon){
-                    //icon.remove();
-                    //alert("removido con exitooo el icono...");
-                   }
                 ''').then((value) {
-                    print(
-                        "se ejecutó bieeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeen :D");
-                    return true;
-                  }).onError((error, stackTrace) {
-                    print(
-                        "ocurrió un errooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooor");
-                    return false;
-                  });
-                  if (_valor) {
-                    break;
+                      print(
+                          "se ejecutó bieeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeen :D");
+                      return true;
+                    }).onError((error, stackTrace) {
+                      print(
+                          "ocurrió un errooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooor");
+                      return false;
+                    });
+                    if (_valor) {
+                      break;
+                    }
                   }
                 }
-              }
 
-              //primero guardamos el valor en una variable Javascript sobre si el botón existe o no
-              await _controller!.runJavaScript('''
+                //primero guardamos el valor en una variable Javascript sobre si el botón existe o no
+                await _controller!.runJavaScript('''
               var existeButon = false;
               var buton1 = document.getElementById("verBotonRV");
                if(buton1){
@@ -165,26 +173,29 @@ class MyWebViewState extends ConsumerState<MyWebView> {
                }
               ''');
 
-              //hacemos una comprobación de si existe el boton de realidad virtual (servirá más adelante)
-              Object _resultado = await _controller!
-                  .runJavaScriptReturningResult("existeButon");
+                //hacemos una comprobación de si existe el boton de realidad virtual (servirá más adelante)
+                Object _resultado = await _controller!
+                    .runJavaScriptReturningResult("existeButon");
 
-              ref.read(mostrarPantallaCarga.notifier).update((state) => false);
-            }
+                ref
+                    .read(mostrarPantallaCarga.notifier)
+                    .update((state) => false);
+              }
 
-            //si no se está mostrando la "x" de salida, entonces la mostraremos
-            if (ref.watch(mostrarBotonSalida) == false) {
-              ref.read(mostrarBotonSalida.notifier).update((state) => true);
-            }
+              //si no se está mostrando la "x" de salida, entonces la mostraremos
+              if (ref.watch(mostrarBotonSalida) == false) {
+                ref.read(mostrarBotonSalida.notifier).update((state) => true);
+              }
 
-            if (!existeGiroscopio) {
-              await Future.delayed(
-                const Duration(seconds: 1),
-              );
+              if (!existeGiroscopio) {
+                await Future.delayed(
+                  const Duration(seconds: 1),
+                );
 
-              _widget.mostrarVentana(
-                  "El teléfono no es compatible con Realidad Virtual...",
-                  context);
+                _widget.mostrarVentana(
+                    "El teléfono no es compatible con Realidad Virtual...",
+                    context);
+              }
             }
           }
         },
@@ -221,7 +232,6 @@ class MyWebViewState extends ConsumerState<MyWebView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                _widget.botonPruebas(_mostrarBotonSalidaProvider, _controller),
                 IconButton(
                   onPressed: () async {
                     print("saliendo");
@@ -235,12 +245,15 @@ class MyWebViewState extends ConsumerState<MyWebView> {
                     color: Colors.white,
                   ),
                 ),
-                _widget.botonAgregarCursor(
-                    _mostrarBotonSalidaProvider, _controller),
-                _widget.botonQuitarCursor(
-                    _mostrarBotonSalidaProvider, _controller),
-                _widget.imprimirCodigoFuente(
-                    _mostrarBotonSalidaProvider, _controller),
+                // _widget.botonPruebas(_mostrarBotonSalidaProvider, _controller),
+                // _widget.botonAgregarCursor(
+                //     _mostrarBotonSalidaProvider, _controller),
+                // _widget.botonQuitarCursor(
+                //     _mostrarBotonSalidaProvider, _controller),
+                // _widget.imprimirCodigoFuente(
+                //     _mostrarBotonSalidaProvider, _controller),
+                // _widget.establecerJscript(
+                //     _mostrarBotonSalidaProvider, _controller)
               ],
             ),
           )),

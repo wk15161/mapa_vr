@@ -1,0 +1,932 @@
+I/chromium(30999): [INFO:CONSOLE(1)] "<html lang="es" class="a-fullscreen">
+
+<head>
+    I/chromium(30999):
+    <meta charset="utf-8">
+    I/chromium(30999):
+    <meta name="description" content="Recorrido en 360° por UPVT | TraveVR">
+    I/chromium(30999):
+    I/chromium(30999): <title>Recorrido en 360° | TraveVR</title>
+    I/chromium(30999):
+    I/chromium(30999): <!-- Favicon -->
+    I/chromium(30999):
+    <link href="assets/images/icon.png" rel="icon">
+    I/chromium(30999):
+    I/chromium(30999): <!-- A-Frame -->
+    I/chromium(30999):
+    <meta aframe-injected="" name="viewport"
+        content="width=device-width,initial-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no,minimal-ui,viewport-fit=cover">
+    <meta aframe-injected="" name="mobile-web-app-capable" content="yes">
+    <meta aframe-injected="" name="theme-color" content="black">
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <style>
+        /* .a-fullscreen means not embedded. */
+        I/chromium(30999): html.a-fullscreen {
+            I/chromium(30999): bottom: 0;
+            I/chromium(30999): left: 0;
+            I/chromium(30999): position: fixed;
+            I/chromium(30999): right: 0;
+            I/chromium(30999): top: 0;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): html.a-fullscreen body {
+            I/chromium(30999): height: 100%;
+            I/chromium(30999): margin: 0;
+            I/chromium(30999): overflow: hidden;
+            I/chromium(30999): padding: 0;
+            I/chromium(30999): width: 100%;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999):
+
+        /* Class is removed when doing <a-scene embedded>. */
+        I/chromium(30999): html.a-fullscreen .a-canvas {
+            I/chromium(30999): width: 100% !important;
+            I/chromium(30999): height: 100% !important;
+            I/chromium(30999): top: 0 !important;
+            I/chromium(30999): left: 0 !important;
+            I/chromium(30999): right: 0 !important;
+            I/chromium(30999): bottom: 0 !important;
+            I/chromium(30999): position: fixed !important;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): html:not(.a-fullscreen) .a-enter-vr,
+        I/chromium(30999): html:not(.a-fullscreen) .a-enter-ar {
+            I/chromium(30999): right: 5px;
+            I/chromium(30999): bottom: 5px;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): html:not(.a-fullscreen) .a-enter-ar {
+            I/chromium(30999): right: 60px;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999):
+
+        /* In chrome mobile the user agent stylesheet set it to white  */
+        I/chromium(30999): :-webkit-full-screen {
+            I/chromium(30999): background-color: transparent;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): .a-hidden {
+            I/chromium(30999): display: none !important;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): .a-canvas {
+            I/chromium(30999): height: 100%;
+            I/chromium(30999): left: 0;
+            I/chromium(30999): position: absolute;
+            I/chromium(30999): top: 0;
+            I/chromium(30999): width: 100%;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): .a-canvas.a-grab-cursor:hover {
+            I/chromium(30999): cursor: grab;
+            I/chromium(30999): cursor: -moz-grab;
+            I/chromium(30999): cursor: -webkit-grab;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): canvas.a-canvas.a-mouse-cursor-hover:hover {
+            I/chromium(30999): cursor: pointer;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): .a-inspector-loader {
+            I/chromium(30999): background-color: #ed3160;
+            I/chromium(30999): position: fixed;
+            I/chromium(30999): left: 3px;
+            I/chromium(30999): top: 3px;
+            I/chromium(30999): padding: 6px 10px;
+            I/chromium(30999): color: #fff;
+            I/chromium(30999): text-decoration: none;
+            I/chromium(30999): font-size: 12px;
+            I/chromium(30999): font-family: Roboto, sans-serif;
+            I/chromium(30999): text-align: center;
+            I/chromium(30999): z-index: 99999;
+            I/chromium(30999): width: 204px;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999):
+
+        /* Inspector loader animation */
+        I/chromium(30999): @keyframes dots-1 {
+            from {
+                opacity: 0;
+            }
+
+            25% {
+                opacity: 1;
+            }
+        }
+
+        I/chromium(30999): @keyframes dots-2 {
+            from {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        I/chromium(30999): @keyframes dots-3 {
+            from {
+                opacity: 0;
+            }
+
+            75% {
+                opacity: 1;
+            }
+        }
+
+        I/chromium(30999): @-webkit-keyframes dots-1 {
+            from {
+                opacity: 0;
+            }
+
+            25% {
+                opacity: 1;
+            }
+        }
+
+        I/chromium(30999): @-webkit-keyframes dots-2 {
+            from {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        I/chromium(30999): @-webkit-keyframes dots-3 {
+            from {
+                opacity: 0;
+            }
+
+            75% {
+                opacity: 1;
+            }
+        }
+
+        I/chromium(30999): I/chromium(30999): .a-inspector-loader .dots span {
+            I/chromium(30999): animation: dots-1 2s infinite steps(1);
+            I/chromium(30999): -webkit-animation: dots-1 2s infinite steps(1);
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): .a-inspector-loader .dots span:first-child+span {
+            I/chromium(30999): animation-name: dots-2;
+            I/chromium(30999): -webkit-animation-name: dots-2;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): .a-inspector-loader .dots span:first-child+span+span {
+            I/chromium(30999): animation-name: dots-3;
+            I/chromium(30999): -webkit-animation-name: dots-3;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): a-scene {
+            I/chromium(30999): display: block;
+            I/chromium(30999): position: relative;
+            I/chromium(30999): height: 100%;
+            I/chromium(30999): width: 100%;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): a-assets,
+        I/chromium(30999): a-scene video,
+        I/chromium(30999): a-scene img,
+        I/chromium(30999): a-scene audio {
+            I/chromium(30999): display: none;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): .a-enter-vr-modal,
+        I/chromium(30999): .a-orientation-modal {
+            I/chromium(30999): font-family: Consolas, Andale Mono, Courier New, monospace;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): .a-enter-vr-modal a {
+            I/chromium(30999): border-bottom: 1px solid #fff;
+            I/chromium(30999): padding: 2px 0;
+            I/chromium(30999): text-decoration: none;
+            I/chromium(30999): transition: .1s color ease-in;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): .a-enter-vr-modal a:hover {
+            I/chromium(30999): background-color: #fff;
+            I/chromium(30999): color: #111;
+            I/chromium(30999): padding: 2px 4px;
+            I/chromium(30999): position: relative;
+            I/chromium(30999): left: -4px;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): .a-enter-vr,
+        I/chromium(30999): .a-enter-ar {
+            I/chromium(30999): font-family: sans-serif, monospace;
+            I/chromium(30999): font-size: 13px;
+            I/chromium(30999): width: 100%;
+            I/chromium(30999): font-weight: 200;
+            I/chromium(30999): line-height: 16px;
+            I/chromium(30999): position: absolute;
+            I/chromium(30999): right: 20px;
+            I/chromium(30999): bottom: 20px;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): .a-enter-ar {
+            I/chromium(30999): right: 80px;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): .a-enter-vr-button,
+        I/chromium(30999): .a-enter-vr-modal,
+        I/chromium(30999): .a-enter-vr-modal a {
+            I/chromium(30999): color: #fff;
+            I/chromium(30999): user-select: none;
+            I/chromium(30999): outline: none;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): .a-enter-vr-button {
+            I/chromium(30999): background: rgba(0, 0, 0, 0.35) url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27108%27 height=%2762%27 viewBox=%270 0 108 62%27%3E%3Ctitle%3Eaframe-vrmode-noborder-reduced-tracking%3C/title%3E%3Cpath d=%27M68.81,21.56H64.23v8.27h4.58a4.13,4.13,0,0,0,3.1-1.09,4.2,4.2,0,0,0,1-3,4.24,4.24,0,0,0-1-3A4.05,4.05,0,0,0,68.81,21.56Z%27 fill=%27%23fff%27/%3E%3Cpath d=%27M96,0H12A12,12,0,0,0,0,12V50A12,12,0,0,0,12,62H96a12,12,0,0,0,12-12V12A12,12,0,0,0,96,0ZM41.9,46H34L24,16h8l6,21.84,6-21.84H52Zm39.29,0H73.44L68.15,35.39H64.23V46H57V16H68.81q5.32,0,8.34,2.37a8,8,0,0,1,3,6.69,9.68,9.68,0,0,1-1.27,5.18,8.9,8.9,0,0,1-4,3.34l6.26,12.11Z%27 fill=%27%23fff%27/%3E%3C/svg%3E") 50% 50% no-repeat;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): .a-enter-ar-button {
+            I/chromium(30999): background: rgba(0, 0, 0, 0.20) url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27108%27 height=%2762%27 viewBox=%270 0 108 62%27%3E%3Ctitle%3Eaframe-armode-noborder-reduced-tracking%3C/title%3E%3Cpath d=%27M96,0H12A12,12,0,0,0,0,12V50A12,12,0,0,0,12,62H96a12,12,0,0,0,12-12V12A12,12,0,0,0,96,0Zm8,50a8,8,0,0,1-8,8H12a8,8,0,0,1-8-8V12a8,8,0,0,1,8-8H96a8,8,0,0,1,8,8Z%27 fill=%27%23fff%27/%3E%3Cpath d=%27M43.35,39.82H32.51L30.45,46H23.88L35,16h5.73L52,46H45.43Zm-9.17-5h7.5L37.91,23.58Z%27 fill=%27%23fff%27/%3E%3Cpath d=%27M68.11,35H63.18V46H57V16H68.15q5.31,0,8.2,2.37a8.18,8.18,0,0,1,2.88,6.7,9.22,9.22,0,0,1-1.33,5.12,9.09,9.09,0,0,1-4,3.26l6.49,12.26V46H73.73Zm-4.93-5h5a5.09,5.09,0,0,0,3.6-1.18,4.21,4.21,0,0,0,1.28-3.27,4.56,4.56,0,0,0-1.2-3.34A5,5,0,0,0,68.15,21h-5Z%27 fill=%27%23fff%27/%3E%3C/svg%3E") 50% 50% no-repeat;
+            I/chromium(30999):
+        }
+
+        I/chromium(30999): I/chromium(30999): .a-enter-vr.fullscreen .a-enter-vr-button {
+            I/chromium(30999): background-image: url("data:image/svg+xml,%3C%3Fxml version=%271.0%27 encoding=%27UTF-8%27 standalone=%27no%27%3F%3E%3Csvg width=%27108%27 height=%2762%27 viewBox=%270 0 108 62%27 version=%271.1%27 id=%27svg320%27 sodipodi:docname=%27fullscreen-aframe.svg%27 xml:space=%27preserve%27 inkscape:version=%271.2.1 %289c6d41e  2022-07-14%29%27 xmlns:inkscape=%27http://www.inkscape.org/namespaces/inkscape%27 xmlns:sodipodi=%27http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd%27 xmlns=%27http://www.w3.org/2000/svg%27 xmlns:svg=%27http://www.w3.org/2000/svg%27 xmlns:rdf=%27http://www.w3.org/1999/02/22-rdf-syntax-ns%23%27 xmlns:cc=%27http://creativecommons.org/ns%23%27 xmlns:dc=%27http://purl.org/dc/elements/1.1/%27%3E%3Cdefs id=%27defs324%27 /%3E%3Csodipodi:namedview id=%27namedview322%27 pagecolor=%27%23ffffff%27 bordercolor=%27%23000000%27 borderopacity=%270.25%27 inkscape:showpageshadow=%272%27 inkscape:pageopacity=%270.0%27 inkscape:pagecheckerboard=%270%27 inkscape:deskcolor=%27%23d1d1d1%27 showgrid=%27false%27 inkscape:zoom=%273.8064516%27 inkscape:cx=%2791.423729%27 inkscape:cy=%27-1.4449153%27 inkscape:window-width=%271440%27 inkscape:window-height=%27847%27 inkscape:window-x=%2732%27 inkscape:window-y=%2725%27 inkscape:window-maximized=%270%27 inkscape:current-layer=%27svg320%27 /%3E%3Ctitle id=%27title312%27%3Eaframe-armode-noborder-reduced-tracking%3C/title%3E%3Cpath d=%27M96 0H12A12 12 0 0 0 0 12V50A12 12 0 0 0 12 62H96a12 12 0 0 0 12-12V12A12 12 0 0 0 96 0Zm8 50a8 8 0 0 1-8 8H12a8 8 0 0 1-8-8V12a8 8 0 0 1 8-8H96a8 8 0 0 1 8 8Z%27 fill=%27%23fff%27 id=%27path314%27 style=%27fill:%23ffffff%27 /%3E%3Cg id=%27g356%27 transform=%27translate%28-206.61017 -232.61864%29%27%3E%3C/g%3E%3Cg id=%27g358%27 transform=%27translate%28-206.61017 -232.61864%29%27%3E%3C/g%3E%3Cg id=%27g360%27 transform=%27translate%28-206.61017 -232.61864%29%27%3E%3C/g%3E%3Cg id=%27g362%27 transform=%27translate%28-206.61017 -232.61864%29%27%3E%3C/g%3E%3Cg id=%27g364%27 transform=%27translate%28-206.61017 -232.61864%29%27%3E%3C/g%3E%3Cg id=%27g366%27 transform=%27translate%28-206.61017 -232.61864%29%27%3E%3C/g%3E%3Cg id=%27g368%27 transform=%27translate%28-206.61017 -232.61864%29%27%3E%3C/g%3E%3Cg id=%27g370%27 transform=%27translate%28-206.61017 -232.61864%29%27%3E%3C/g%3E%3Cg id=%27g372%27 transform=%27translate%28-206.61017 -232.61864%29%27%3E%3C/g%3E%3Cg id=%27g374%27 transform=%27translate%28-206.61017 -232.61864%29%27%3E%3C/g%3E%3Cg id=%27g376%27 transform=%27translate%28-206.61017 -232.61864%29%27%3E%3C/g%3E%3Cg id=%27g378%27 transform=%27translate%28-206.61017 -232.61864%29%27%3E%3C/g%3E%3Cg id=%27g380%27 transform=%27translate%28-206.61017 -232.61864%29%27%3E%3C/g%3E%3Cg id=%27g382%27 transform=%27translate%28-206.61017 -232.61864%29%27%3E%3C/g%3E%3Cg id=%27g384%27 transform=%27translate%28-206.61017 -232.61864%29%27%3E%3C/g%3E%3Cmetadata id=%27metadata561%27%3E%3Crdf:RDF%3E%3Ccc:Work rdf:about=%27%27%3E%3Cdc:title%3Eaframe-armode-noborder-reduced-tracking%3C/dc:title%3E%3C/cc:Work%3E%3C/rdf:RDF%3E%3C/metadata%3E%3Cpath d=%27m 98.168511 40.083649 c 0 -1.303681 -0.998788 -2.358041 -2.239389 -2.358041 -1.230088 0.0031 -2.240892 1.05436 -2.240892 2.358041 v 4.881296 l -9.041661 -9.041662 c -0.874129 -0.875631 -2.288954 -0.875631 -3.16308 0 -0.874129 0.874126 -0.874129 2.293459 0 3.167585 l 8.995101 8.992101 h -4.858767 c -1.323206 0.0031 -2.389583 1.004796 -2.389583 2.239386 0 1.237598 1.066377 2.237888 2.389583 2.237888 h 10.154599 c 1.323206 0 2.388082 -0.998789 2.392587 -2.237888 -0.0044 -0.03305 -0.009 -0.05858 -0.0134 -0.09161 0.0046 -0.04207 0.0134 -0.08712 0.0134 -0.13066 V 40.085172 h -1.52e-4%27 id=%27path596%27 style=%27fill:%23ffffff%3Bstroke-width:1.50194%27 /%3E%3Cpath d=%27m 23.091002 35.921781 -9.026643 9.041662 v -4.881296 c 0 -1.303681 -1.009302 -2.355037 -2.242393 -2.358041 -1.237598 0 -2.237888 1.05436 -2.237888 2.358041 l -0.0031 10.016421 c 0 0.04356 0.01211 0.08862 0.0015 0.130659 -0.0031 0.03153 -0.009 0.05709 -0.01211 0.09161 0.0031 1.239099 1.069379
+ I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-enter-vr-button,
+            I/chromium(30999): .a-enter-ar-button {
+                I/chromium(30999): background-size: 90% 90%;
+                I/chromium(30999): border: 0;
+                I/chromium(30999): bottom: 0;
+                I/chromium(30999): cursor: pointer;
+                I/chromium(30999): min-width: 58px;
+                I/chromium(30999): min-height: 34px;
+                I/chromium(30999):
+                /* 1.74418604651 */
+                I/chromium(30999):
+                /*
+I/chromium(30999):     In order to keep the aspect ratio when resizing
+I/chromium(30999):     padding-top percentages are relative to the containing block's width.
+I/chromium(30999):     http://stackoverflow.com/questions/12121090/responsively-change-div-size-keeping-aspect-ratio
+I/chromium(30999):   */
+                I/chromium(30999): padding-right: 0;
+                I/chromium(30999): padding-top: 0;
+                I/chromium(30999): position: absolute;
+                I/chromium(30999): right: 0;
+                I/chromium(30999): transition: background-color .05s ease;
+                I/chromium(30999): -webkit-transition: background-color .05s ease;
+                I/chromium(30999): z-index: 9999;
+                I/chromium(30999): border-radius: 8px;
+                I/chromium(30999): touch-action: manipulation;
+                /* Prevent iOS double tap zoom on the button */
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-enter-ar-button {
+                I/chromium(30999): background-size: 100% 90%;
+                I/chromium(30999): margin-right: 10px;
+                I/chromium(30999): border-radius: 7px;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-enter-ar-button:active,
+            I/chromium(30999): .a-enter-ar-button:hover,
+            I/chromium(30999): .a-enter-vr-button:active,
+            I/chromium(30999): .a-enter-vr-button:hover {
+                I/chromium(30999): background-color: #ef2d5e;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-enter-vr-button.resethover {
+                I/chromium(30999): background-color: rgba(0, 0, 0, 0.35);
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): I/chromium(30999): .a-enter-vr-modal {
+                I/chromium(30999): background-color: #666;
+                I/chromium(30999): border-radius: 0;
+                I/chromium(30999): display: none;
+                I/chromium(30999): min-height: 32px;
+                I/chromium(30999): margin-right: 70px;
+                I/chromium(30999): padding: 9px;
+                I/chromium(30999): width: 280px;
+                I/chromium(30999): right: 2%;
+                I/chromium(30999): position: absolute;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-enter-vr-modal:after {
+                I/chromium(30999): border-bottom: 10px solid transparent;
+                I/chromium(30999): border-left: 10px solid #666;
+                I/chromium(30999): border-top: 10px solid transparent;
+                I/chromium(30999): display: inline-block;
+                I/chromium(30999): content: '';
+                I/chromium(30999): position: absolute;
+                I/chromium(30999): right: -5px;
+                I/chromium(30999): top: 5px;
+                I/chromium(30999): width: 0;
+                I/chromium(30999): height: 0;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-enter-vr-modal p,
+            I/chromium(30999): .a-enter-vr-modal a {
+                I/chromium(30999): display: inline;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-enter-vr-modal p {
+                I/chromium(30999): margin: 0;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-enter-vr-modal p:after {
+                I/chromium(30999): content: ' ';
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-orientation-modal {
+                I/chromium(30999): background: rgba(244, 244, 244, 1) url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20version%3D%221.1%22%20x%3D%220px%22%20y%3D%220px%22%20viewBox%3D%220%200%2090%2090%22%20enable-background%3D%22new%200%200%2090%2090%22%20xml%3Aspace%3D%22preserve%22%3E%3Cpolygon%20points%3D%220%2C0%200%2C0%200%2C0%20%22%3E%3C/polygon%3E%3Cg%3E%3Cpath%20d%3D%22M71.545%2C48.145h-31.98V20.743c0-2.627-2.138-4.765-4.765-4.765H18.456c-2.628%2C0-4.767%2C2.138-4.767%2C4.765v42.789%20%20%20c0%2C2.628%2C2.138%2C4.766%2C4.767%2C4.766h5.535v0.959c0%2C2.628%2C2.138%2C4.765%2C4.766%2C4.765h42.788c2.628%2C0%2C4.766-2.137%2C4.766-4.765V52.914%20%20%20C76.311%2C50.284%2C74.173%2C48.145%2C71.545%2C48.145z%20M18.455%2C16.935h16.344c2.1%2C0%2C3.808%2C1.708%2C3.808%2C3.808v27.401H37.25V22.636%20%20%20c0-0.264-0.215-0.478-0.479-0.478H16.482c-0.264%2C0-0.479%2C0.214-0.479%2C0.478v36.585c0%2C0.264%2C0.215%2C0.478%2C0.479%2C0.478h7.507v7.644%20%20%20h-5.534c-2.101%2C0-3.81-1.709-3.81-3.81V20.743C14.645%2C18.643%2C16.354%2C16.935%2C18.455%2C16.935z%20M16.96%2C23.116h19.331v25.031h-7.535%20%20%20c-2.628%2C0-4.766%2C2.139-4.766%2C4.768v5.828h-7.03V23.116z%20M71.545%2C73.064H28.757c-2.101%2C0-3.81-1.708-3.81-3.808V52.914%20%20%20c0-2.102%2C1.709-3.812%2C3.81-3.812h42.788c2.1%2C0%2C3.809%2C1.71%2C3.809%2C3.812v16.343C75.354%2C71.356%2C73.645%2C73.064%2C71.545%2C73.064z%22%3E%3C/path%3E%3Cpath%20d%3D%22M28.919%2C58.424c-1.466%2C0-2.659%2C1.193-2.659%2C2.66c0%2C1.466%2C1.193%2C2.658%2C2.659%2C2.658c1.468%2C0%2C2.662-1.192%2C2.662-2.658%20%20%20C31.581%2C59.617%2C30.387%2C58.424%2C28.919%2C58.424z%20M28.919%2C62.786c-0.939%2C0-1.703-0.764-1.703-1.702c0-0.939%2C0.764-1.704%2C1.703-1.704%20%20%20c0.94%2C0%2C1.705%2C0.765%2C1.705%2C1.704C30.623%2C62.022%2C29.858%2C62.786%2C28.919%2C62.786z%22%3E%3C/path%3E%3Cpath%20d%3D%22M69.654%2C50.461H33.069c-0.264%2C0-0.479%2C0.215-0.479%2C0.479v20.288c0%2C0.264%2C0.215%2C0.478%2C0.479%2C0.478h36.585%20%20%20c0.263%2C0%2C0.477-0.214%2C0.477-0.478V50.939C70.131%2C50.676%2C69.917%2C50.461%2C69.654%2C50.461z%20M69.174%2C51.417V70.75H33.548V51.417H69.174z%22%3E%3C/path%3E%3Cpath%20d%3D%22M45.201%2C30.296c6.651%2C0%2C12.233%2C5.351%2C12.551%2C11.977l-3.033-2.638c-0.193-0.165-0.507-0.142-0.675%2C0.048%20%20%20c-0.174%2C0.198-0.153%2C0.501%2C0.045%2C0.676l3.883%2C3.375c0.09%2C0.075%2C0.198%2C0.115%2C0.312%2C0.115c0.141%2C0%2C0.273-0.061%2C0.362-0.166%20%20%20l3.371-3.877c0.173-0.2%2C0.151-0.502-0.047-0.675c-0.194-0.166-0.508-0.144-0.676%2C0.048l-2.592%2C2.979%20%20%20c-0.18-3.417-1.629-6.605-4.099-9.001c-2.538-2.461-5.877-3.817-9.404-3.817c-0.264%2C0-0.479%2C0.215-0.479%2C0.479%20%20%20C44.72%2C30.083%2C44.936%2C30.296%2C45.201%2C30.296z%22%3E%3C/path%3E%3C/g%3E%3C/svg%3E") center no-repeat;
+                I/chromium(30999): background-size: 50% 50%;
+                I/chromium(30999): bottom: 0;
+                I/chromium(30999): font-size: 14px;
+                I/chromium(30999): font-weight: 600;
+                I/chromium(30999): left: 0;
+                I/chromium(30999): line-height: 20px;
+                I/chromium(30999): right: 0;
+                I/chromium(30999): position: fixed;
+                I/chromium(30999): top: 0;
+                I/chromium(30999): z-index: 9999999;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-orientation-modal:after {
+                I/chromium(30999): color: #666;
+                I/chromium(30999): content: "Insert phone into Cardboard holder.";
+                I/chromium(30999): display: block;
+                I/chromium(30999): position: absolute;
+                I/chromium(30999): text-align: center;
+                I/chromium(30999): top: 70%;
+                I/chromium(30999): transform: translateY(-70%);
+                I/chromium(30999): width: 100%;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-orientation-modal button {
+                I/chromium(30999): background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20version%3D%221.1%22%20x%3D%220px%22%20y%3D%220px%22%20viewBox%3D%220%200%20100%20100%22%20enable-background%3D%22new%200%200%20100%20100%22%20xml%3Aspace%3D%22preserve%22%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M55.209%2C50l17.803-17.803c1.416-1.416%2C1.416-3.713%2C0-5.129c-1.416-1.417-3.713-1.417-5.129%2C0L50.08%2C44.872%20%20L32.278%2C27.069c-1.416-1.417-3.714-1.417-5.129%2C0c-1.417%2C1.416-1.417%2C3.713%2C0%2C5.129L44.951%2C50L27.149%2C67.803%20%20c-1.417%2C1.416-1.417%2C3.713%2C0%2C5.129c0.708%2C0.708%2C1.636%2C1.062%2C2.564%2C1.062c0.928%2C0%2C1.856-0.354%2C2.564-1.062L50.08%2C55.13l17.803%2C17.802%20%20c0.708%2C0.708%2C1.637%2C1.062%2C2.564%2C1.062s1.856-0.354%2C2.564-1.062c1.416-1.416%2C1.416-3.713%2C0-5.129L55.209%2C50z%22%3E%3C/path%3E%3C/svg%3E") no-repeat;
+                I/chromium(30999): border: none;
+                I/chromium(30999): height: 50px;
+                I/chromium(30999): text-indent: -9999px;
+                I/chromium(30999): width: 50px;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-loader-title {
+                I/chromium(30999): background-color: rgba(0, 0, 0, 0.6);
+                I/chromium(30999): font-family: sans-serif, monospace;
+                I/chromium(30999): text-align: center;
+                I/chromium(30999): font-size: 20px;
+                I/chromium(30999): height: 50px;
+                I/chromium(30999): font-weight: 300;
+                I/chromium(30999): line-height: 50px;
+                I/chromium(30999): position: absolute;
+                I/chromium(30999): right: 0px;
+                I/chromium(30999): left: 0px;
+                I/chromium(30999): top: 0px;
+                I/chromium(30999): color: white;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-modal {
+                I/chromium(30999): position: absolute;
+                I/chromium(30999): background: rgba(0, 0, 0, 0.60);
+                I/chromium(30999): background-size: 50% 50%;
+                I/chromium(30999): bottom: 0;
+                I/chromium(30999): font-size: 14px;
+                I/chromium(30999): font-weight: 600;
+                I/chromium(30999): left: 0;
+                I/chromium(30999): line-height: 20px;
+                I/chromium(30999): right: 0;
+                I/chromium(30999): position: fixed;
+                I/chromium(30999): top: 0;
+                I/chromium(30999): z-index: 9999999;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-dialog {
+                I/chromium(30999): position: relative;
+                I/chromium(30999): left: 50%;
+                I/chromium(30999): top: 50%;
+                I/chromium(30999): transform: translate(-50%, -50%);
+                I/chromium(30999): z-index: 199995;
+                I/chromium(30999): width: 300px;
+                I/chromium(30999): height: 200px;
+                I/chromium(30999): background-size: contain;
+                I/chromium(30999): background-color: white;
+                I/chromium(30999): font-family: sans-serif, monospace;
+                I/chromium(30999): font-size: 20px;
+                I/chromium(30999): border-radius: 3px;
+                I/chromium(30999): padding: 6px;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-dialog-text-container {
+                I/chromium(30999): width: 100%;
+                I/chromium(30999): height: 70%;
+                I/chromium(30999): align-self: flex-start;
+                I/chromium(30999): display: flex;
+                I/chromium(30999): justify-content: center;
+                I/chromium(30999): align-content: center;
+                I/chromium(30999): flex-direction: column;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-dialog-text {
+                I/chromium(30999): display: inline-block;
+                I/chromium(30999): font-weight: normal;
+                I/chromium(30999): font-size: 14pt;
+                I/chromium(30999): margin: 8px;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-dialog-buttons-container {
+                I/chromium(30999): display: inline-flex;
+                I/chromium(30999): align-self: flex-end;
+                I/chromium(30999): width: 100%;
+                I/chromium(30999): height: 30%;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-dialog-button {
+                I/chromium(30999): cursor: pointer;
+                I/chromium(30999): align-self: center;
+                I/chromium(30999): opacity: 0.9;
+                I/chromium(30999): height: 80%;
+                I/chromium(30999): width: 50%;
+                I/chromium(30999): font-size: 12pt;
+                I/chromium(30999): margin: 4px;
+                I/chromium(30999): border-radius: 2px;
+                I/chromium(30999): text-align:center;
+                I/chromium(30999): border: none;
+                I/chromium(30999): display: inline-block;
+                I/chromium(30999): -webkit-transition: all 0.25s ease-in-out;
+                I/chromium(30999): transition: all 0.25s ease-in-out;
+                I/chromium(30999): box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10), 0 1px 2px rgba(0, 0, 0, 0.20);
+                I/chromium(30999): user-select: none;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-dialog-permission-button:hover {
+                I/chromium(30999): box-shadow: 0 7px 14px rgba(0, 0, 0, 0.20), 0 2px 2px rgba(0, 0, 0, 0.20);
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-dialog-allow-button {
+                I/chromium(30999): background-color: #00ceff;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-dialog-deny-button {
+                I/chromium(30999): background-color: #ff005b;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-dialog-ok-button {
+                I/chromium(30999): background-color: #00ceff;
+                I/chromium(30999): width: 100%;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-dom-overlay:not(.a-no-style) {
+                I/chromium(30999): overflow: hidden;
+                I/chromium(30999): position: absolute;
+                I/chromium(30999): pointer-events: none;
+                I/chromium(30999): box-sizing: border-box;
+                I/chromium(30999): bottom: 0;
+                I/chromium(30999): left: 0;
+                I/chromium(30999): right: 0;
+                I/chromium(30999): top: 0;
+                I/chromium(30999): padding: 1em;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999): I/chromium(30999): .a-dom-overlay:not(.a-no-style)>* {
+                I/chromium(30999): pointer-events: auto;
+                I/chromium(30999):
+            }
+
+            I/chromium(30999):
+            /*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL3NyYy9zdHlsZS9hZnJhbWUuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLHNDQUFzQztBQUN0QztFQUNFLFNBQVM7RUFDVCxPQUFPO0VBQ1AsZUFBZTtFQUNmLFFBQVE7RUFDUixNQUFNO0FBQ1I7O0FBRUE7RUFDRSxZQUFZO0VBQ1osU0FBUztFQUNULGdCQUFnQjtFQUNoQixVQUFVO0VBQ1YsV0FBVztBQUNiOztBQUVBLG9EQUFvRDtBQUNwRDtFQUNFLHNCQUFzQjtFQUN0Qix1QkFBdUI7RUFDdkIsaUJBQWlCO0VBQ2pCLGtCQUFrQjtFQUNsQixtQkFBbUI7RUFDbkIsb0JBQW9CO0VBQ3BCLDBCQUEwQjtBQUM1Qjs7QUFFQTs7RUFFRSxVQUFVO0VBQ1YsV0FBVztBQUNiOztBQUVBO0VBQ0UsV0FBVztBQUNiOztBQUVBLGdFQUFnRTtBQUNoRTtFQUNFLDZCQUE2QjtBQUMvQjs7QUFFQTtFQUNFLHdCQUF3QjtBQUMxQjs7QUFFQTtFQUNFLFlBQVk7RUFDWixPQUFPO0VBQ1Asa0JBQWtCO0VBQ2xCLE1BQU07RUFDTixXQUFXO0FBQ2I7O0FBRUE7RUFDRSxZQUFZO0VBQ1osaUJBQWlCO0VBQ2pCLG9CQUFvQjtBQUN0Qjs7QUFFQTtFQUNFLGVBQWU7QUFDakI7O0FBRUE7RUFDRSx5QkFBeUI7RUFDekIsZUFBZTtFQUNmLFNBQVM7RUFDVCxRQUFRO0VBQ1IsaUJBQWlCO0VBQ2pCLFdBQVc7RUFDWCxxQkFBcUI7RUFDckIsZUFBZTtFQUNmLDhCQUE4QjtFQUM5QixrQkFBa0I7RUFDbEIsY0FBYztFQUNkLFlBQVk7QUFDZDs7QUFFQSwrQkFBK0I7QUFDL0Isb0JBQW9CLE9BQU8sVUFBVSxFQUFFLEVBQUUsTUFBTSxVQUFVLEVBQUUsRUFBRTtBQUM3RCxvQkFBb0IsT0FBTyxVQUFVLEVBQUUsRUFBRSxNQUFNLFVBQVUsRUFBRSxFQUFFO0FBQzdELG9CQUFvQixPQUFPLFVBQVUsRUFBRSxFQUFFLE1BQU0sVUFBVSxFQUFFLEVBQUU7QUFDN0QsNEJBQTRCLE9BQU8sVUFBVSxFQUFFLEVBQUUsTUFBTSxVQUFVLEVBQUUsRUFBRTtBQUNyRSw0QkFBNEIsT0FBTyxVQUFVLEVBQUUsRUFBRSxNQUFNLFVBQVUsRUFBRSxFQUFFO0FBQ3JFLDRCQUE0QixPQUFPLFVBQVUsRUFBRSxFQUFFLE1BQU0sVUFBVSxFQUFFLEVBQUU7O0FBRXJFO0VBQ0Usc0NBQXNDO0VBQ3RDLDhDQUE4QztBQUNoRDs7QUFFQTtFQUNFLHNCQUFzQjtFQUN0Qiw4QkFBOEI7QUFDaEM7O0FBRUE7RUFDRSxzQkFBc0I7RUFDdEIsOEJBQThCO0FBQ2hDOztBQUVBO0VBQ0UsY0FBYztFQUNkLGtCQUFrQjtFQUNsQixZQUFZO0VBQ1osV0FBVztBQUNiOztBQUVBOzs7O0VBSUUsYUFBYTtBQUNmOztBQUVBOztFQUVFLDBEQUEwRDtBQUM1RDs7QUFFQTtFQUNFLDZCQUE2QjtFQUM3QixjQUFjO0VBQ2QscUJBQXFCO0VBQ3JCLDZCQUE2QjtBQUMvQjs7QUFFQTtFQUNFLHNCQUFzQjtFQUN0QixXQUFXO0VBQ1gsZ0JBQWdCO0VBQ2hCLGtCQUFrQjtFQUNsQixVQUFVO0FBQ1o7O0FBRUE7O0VBRUUsa0NBQWtDO0VBQ2xDLGVBQWU7RUFDZixXQUFXO0VBQ1gsZ0JBQWdCO0VBQ2hCLGlCQUFpQjtFQUNqQixrQkFBa0I7RUFDbEIsV0FBVztFQUNYLFlBQVk7QUFDZDs7QUFFQTtFQUNFLFdBQVc7QUFDYjs7QUFFQTs7O0VBR0UsV0FBVztFQUNYLGlCQUFpQjtFQUNqQixhQUFhO0FBQ2Y7O0FBRUE7RUFDRSx5RkFBNHFCO0FBQzlxQjs7QUFFQTtFQUNFLHlGQUFrekI7QUFDcHpCOztBQUVBO0VBQ0UseURBQTJxSztBQUM3cUs7O0FBRUE7O0VBRUUsd0JBQXdCO0VBQ3hCLFNBQVM7RUFDVCxTQUFTO0VBQ1QsZUFBZTtFQUNmLGVBQWU7RUFDZixnQkFBZ0I7RUFDaEIsa0JBQWtCO0VBQ2xCOzs7O0dBSUM7RUFDRCxnQkFBZ0I7RUFDaEIsY0FBYztFQUNkLGtCQUFrQjtFQUNsQixRQUFRO0VBQ1Isc0NBQXNDO0VBQ3RDLDhDQUE4QztFQUM5QyxhQUFhO0VBQ2Isa0JBQWtCO0VBQ2xCLDBCQUEwQixFQUFFLDhDQUE4QztBQUM1RTs7QUFFQTtFQUNFLHlCQUF5QjtFQUN6QixrQkFBa0I7RUFDbEIsa0JBQWtCO0FBQ3BCOztBQUVBOzs7O0VBSUUseUJBQXlCO0FBQzNCOztBQUVBO0VBQ0UscUNBQXFDO0FBQ3ZDOzs7QUFHQTtFQUNFLHNCQUFzQjtFQUN0QixnQkFBZ0I7RUFDaEIsYUFBYTtFQUNiLGdCQUFnQjtFQUNoQixrQkFBa0I7RUFDbEIsWUFBWTtFQUNaLFlBQVk7RUFDWixTQUFTO0VBQ1Qsa0JBQWtCO0FBQ3BCOztBQUVBO0VBQ0UscUNBQXFDO0VBQ3JDLDRCQUE0QjtFQUM1QixrQ0FBa0M7RUFDbEMscUJBQXFCO0VBQ3JCLFdBQVc7RUFDWCxrQkFBa0I7RUFDbEIsV0FBVztFQUNYLFFBQVE7RUFDUixRQUFRO0VBQ1IsU0FBUztBQUNYOztBQUVBOztFQUVFLGVBQWU7QUFDakI7O0FBRUE7RUFDRSxTQUFTO0FBQ1g7O0FBRUE7RUFDRSxZQUFZO0FBQ2Q7O0FBRUE7RUFDRSwyRkFBaXZGO0VBQ2p2Rix3QkFBd0I7RUFDeEIsU0FBUztFQUNULGVBQWU7RUFDZixnQkFBZ0I7RUFDaEIsT0FBTztFQUNQLGlCQUFpQjtFQUNqQixRQUFRO0VBQ1IsZUFBZTtFQUNmLE1BQU07RUFDTixnQkFBZ0I7QUFDbEI7O0FBRUE7RUFDRSxXQUFXO0VBQ1gsOENBQThDO0VBQzlDLGNBQWM7RUFDZCxrQkFBa0I7RUFDbEIsa0JBQWtCO0VBQ2xCLFFBQVE7RUFDUiwyQkFBMkI7RUFDM0IsV0FBVztBQUNiOztBQUVBO0VBQ0UsNkRBQTI1QjtFQUMzNUIsWUFBWTtFQUNaLFlBQVk7RUFDWixvQkFBb0I7RUFDcEIsV0FBVztBQUNiOztBQUVBO0VBQ0Usb0NBQW9DO0VBQ3BDLGtDQUFrQztFQUNsQyxrQkFBa0I7RUFDbEIsZUFBZTtFQUNmLFlBQVk7RUFDWixnQkFBZ0I7RUFDaEIsaUJBQWlCO0VBQ2pCLGtCQUFrQjtFQUNsQixVQUFVO0VBQ1YsU0FBUztFQUNULFFBQVE7RUFDUixZQUFZO0FBQ2Q7O0FBRUE7RUFDRSxrQkFBa0I7RUFDbEIsK0JBQStCO0VBQy9CLHdCQUF3QjtFQUN4QixTQUFTO0VBQ1QsZUFBZTtFQUNmLGdCQUFnQjtFQUNoQixPQUFPO0VBQ1AsaUJBQWlCO0VBQ2pCLFFBQVE7RUFDUixlQUFlO0VBQ2YsTUFBTTtFQUNOLGdCQUFnQjtBQUNsQjs7QUFFQTtFQUNFLGtCQUFrQjtFQUNsQixTQUFTO0VBQ1QsUUFBUTtFQUNSLGdDQUFnQztFQUNoQyxlQUFlO0VBQ2YsWUFBWTtFQUNaLGFBQWE7RUFDYix
+I/chromium(30999):   background-color: #333;
+I/chromium(30999):   color: #fafafa;
+I/chromium(30999):   border-radius: 0;
+I/chromium(30999):   font: 10px monospace;
+I/chromium(30999):   left: 5px;
+I/chromium(30999):   line-height: 1em;
+I/chromium(30999):   opacity: 0.85;
+I/chromium(30999):   overflow: hidden;
+I/chromium(30999):   padding: 10px;
+I/chromium(30999):   position: fixed;
+I/chromium(30999):   top: 5px;
+I/chromium(30999):   width: 300px;
+I/chromium(30999):   z-index: 10000;
+I/chromium(30999): }
+I/chromium(30999):
+I/chromium(30999): .rs-base div.hidden {
+I/chromium(30999):   display: none;
+I/chromium(30999): }
+I/chromium(30999):
+I/chromium(30999): .rs-base h1 {
+I/chromium(30999):   color: #fff;
+I/chromium(30999):   cursor: pointer;
+I/chromium(30999):   font-size: 1.4em;
+I/chromium(30999):   font-weight: 300;
+I/chromium(30999):   margin: 0 0 5px;
+I/chromium(30999):   padding: 0;
+I/chromium(30999): }
+I/chromium(30999):
+I/chromium(30999): .rs-group {
+I/chromium(30999):   display: -webkit-box;
+I/chromium(30999):   display: -webkit-flex;
+I/chromium(30999):   display: flex;
+I/chromium(30999):   -webkit-flex-direction: column-reverse;
+I/chromium(30999):   flex-direction: column-reverse;
+I/chromium(30999):   margin-bottom: 5px;
+I/chromium(30999): }
+I/chromium(30999):
+I/chromium(30999): .rs-group:last-child {
+I/chromium(30999):   margin-bottom: 0;
+I/chromium(30999): }
+I/chromium(30999):
+I/chromium(30999): .rs-counter-base {
+I/chromium(30999):   align-items: center;
+I/chromium(30999):   display: -webkit-box;
+I/chromium(30999):   display: -webkit-flex;
+I/chromium(30999):   display: flex;
+I/chromium(30999):   height: 10px;
+I/chromium(30999):   -webkit-justify-content: space-between;
+I/chromium(30999):   justify-content: space-between;
+I/chromium(30999):   margin: 2px 0;
+I/chromium(30999): }
+I/chromium(30999):
+I/chromium(30999): .rs-counter-base.alarm {
+I/chromium(30999):   color: #b70000;
+I/chromium(30999):   text-shadow: 0 0 0 #b70000,
+I/chromium(30999):                0 0 1px #fff,
+I/chromium(30999):                0 0 1px #fff,
+I/chromium(30999):                0 0 2px #fff,
+I/chromium(30999):                0 0 2px #fff,
+I/chromium(30999):                0 0 3px #fff,
+I/chromium(30999):                0 0 3px #fff,
+I/chromium(30999):                0 0 4px #fff,
+I/chromium(30999):                0 0 4px #fff;
+I/chromium(30999): }
+I/chromium(30999):
+I/chromium(30999): .rs-counter-id {
+I/chromium(30999):   font-weight: 300;
+I/chromium(30999):   -webkit-box-ordinal-group: 0;
+I/chromium(30999):   -webkit-order: 0;
+I/chromium(30999):   order: 0;
+I/chromium(30999):   width: 54px;
+I/chromium(30999): }
+I/chromium(30999):
+I/chromium(30999): .rs-counter-value {
+I/chromium(30999):   font-weight: 300;
+I/chromium(30999):   -webkit-box-ordinal-group: 1;
+I/chromium(30999):   -webkit-order: 1;
+I/chromium(30999):   order: 1;
+I/chromium(30999):   text-align: right;
+I/chromium(30999):   width: 35px;
+I/chromium(30999): }
+I/chromium(30999):
+I/chromium(30999): .rs-canvas {
+I/chromium(30999):   -webkit-box-ordinal-group: 2;
+I/chromium(30999):   -webkit-order: 2;
+I/chromium(30999):   order: 2;
+I/chromium(30999): }
+I/chromium(30999):
+I/chromium(30999): @media (min-width: 480px) {
+I/chromium(30999):   .rs-base {
+I/chromium(30999):     left: 20px;
+I/chromium(30999):     top: 20px;
+I/chromium(30999):   }
+I/chromium(30999): }
+I/chromium(30999): /*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL3NyYy9zdHlsZS9yU3RhdHMuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0Usc0JBQXNCO0VBQ3RCLGNBQWM7RUFDZCxnQkFBZ0I7RUFDaEIsb0JBQW9CO0VBQ3BCLFNBQVM7RUFDVCxnQkFBZ0I7RUFDaEIsYUFBYTtFQUNiLGdCQUFnQjtFQUNoQixhQUFhO0VBQ2IsZUFBZTtFQUNmLFFBQVE7RUFDUixZQUFZO0VBQ1osY0FBYztBQUNoQjs7QUFFQTtFQUNFLGFBQWE7QUFDZjs7QUFFQTtFQUNFLFdBQVc7RUFDWCxlQUFlO0VBQ2YsZ0JBQWdCO0VBQ2hCLGdCQUFnQjtFQUNoQixlQUFlO0VBQ2YsVUFBVTtBQUNaOztBQUVBO0VBQ0Usb0JBQW9CO0VBQ3BCLHFCQUFxQjtFQUNyQixhQUFhO0VBQ2Isc0NBQXNDO0VBQ3RDLDhCQUE4QjtFQUM5QixrQkFBa0I7QUFDcEI7O0FBRUE7RUFDRSxnQkFBZ0I7QUFDbEI7O0FBRUE7RUFDRSxtQkFBbUI7RUFDbkIsb0JBQW9CO0VBQ3BCLHFCQUFxQjtFQUNyQixhQUFhO0VBQ2IsWUFBWTtFQUNaLHNDQUFzQztFQUN0Qyw4QkFBOEI7RUFDOUIsYUFBYTtBQUNmOztBQUVBO0VBQ0UsY0FBYztFQUNkOzs7Ozs7OzsyQkFReUI7QUFDM0I7O0FBRUE7RUFDRSxnQkFBZ0I7RUFDaEIsNEJBQTRCO0VBQzVCLGdCQUFnQjtFQUNoQixRQUFRO0VBQ1IsV0FBVztBQUNiOztBQUVBO0VBQ0UsZ0JBQWdCO0VBQ2hCLDRCQUE0QjtFQUM1QixnQkFBZ0I7RUFDaEIsUUFBUTtFQUNSLGlCQUFpQjtFQUNqQixXQUFXO0FBQ2I7O0FBRUE7RUFDRSw0QkFBNEI7RUFDNUIsZ0JBQWdCO0VBQ2hCLFFBQVE7QUFDVjs7QUFFQTtFQUNFO0lBQ0UsVUFBVTtJQUNWLFNBQVM7RUFDWDtBQUNGIiwic291cmNlc0NvbnRlbnQiOlsiLnJzLWJhc2Uge1xuICBiYWNrZ3JvdW5kLWNvbG9yOiAjMzMzO1xuICBjb2xvcjogI2ZhZmFmYTtcbiAgYm9yZGVyLXJhZGl1czogMDtcbiAgZm9udDogMTBweCBtb25vc3BhY2U7XG4gIGxlZnQ6IDVweDtcbiAgbGluZS1oZWlnaHQ6IDFlbTtcbiAgb3BhY2l0eTogMC44NTtcbiAgb3ZlcmZsb3c6IGhpZGRlbjtcbiAgcGFkZGluZzogMTBweDtcbiAgcG9zaXRpb246IGZpeGVkO1xuICB0b3A6IDVweDtcbiAgd2lkdGg6IDMwMHB4O1xuICB6LWluZGV4OiAxMDAwMDtcbn1cblxuLnJzLWJhc2UgZGl2LmhpZGRlbiB7XG4gIGRpc3BsYXk6IG5vbmU7XG59XG5cbi5ycy1iYXNlIGgxIHtcbiAgY29sb3I6ICNmZmY7XG4gIGN1cnNvcjogcG9pbnRlcjtcbiAgZm9udC1zaXplOiAxLjRlbTtcbiAgZm9udC13ZWlnaHQ6IDMwMDtcbiAgbWFyZ2luOiAwIDAgNXB4O1xuICBwYWRkaW5nOiAwO1xufVxuXG4ucnMtZ3JvdXAge1xuICBkaXNwbGF5OiAtd2Via2l0LWJveDtcbiAgZGlzcGxheTogLXdlYmtpdC1mbGV4O1xuICBkaXNwbGF5OiBmbGV4O1xuICAtd2Via2l0LWZsZXgtZGlyZWN0aW9uOiBjb2x1bW4tcmV2ZXJzZTtcbiAgZmxleC1kaXJlY3Rpb246IGNvbHVtbi1yZXZlcnNlO1xuICBtYXJnaW4tYm90dG9tOiA1cHg7XG59XG5cbi5ycy1ncm91cDpsYXN0LWNoaWxkIHtcbiAgbWFyZ2luLWJvdHRvbTogMDtcbn1cblxuLnJzLWNvdW50ZXItYmFzZSB7XG4gIGFsaWduLWl0ZW1zOiBjZW50ZXI7XG4gIGRpc3BsYXk6IC13ZWJraXQtYm94O1xuICBkaXNwbGF5OiAtd2Via2l0LWZsZXg7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGhlaWdodDogMTBweDtcbiAgLXdlYmtpdC1qdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XG4gIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcbiAgbWFyZ2luOiAycHggMDtcbn1cblxuLnJzLWNvdW50ZXItYmFzZS5hbGFybSB7XG4gIGNvbG9yOiAjYjcwMDAwO1xuICB0ZXh0LXNoYWRvdzogMCAwIDAgI2I3MDAwMCxcbiAgICAgICAgICAgICAgIDAgMCAxcHggI2ZmZixcbiAgICAgICAgICAgICAgIDAgMCAxcHggI2ZmZixcbiAgICAgICAgICAgICAgIDAgMCAycHggI2ZmZixcbiAgICAgICAgICAgICAgIDAgMCAycHggI2ZmZixcbiAgICAgICAgICAgICAgIDAgMCAzcHggI2ZmZixcbiAgICAgICAgICAgICAgIDAgMCAzcHggI2ZmZixcbiAgICAgICAgICAgICAgIDAgMCA0cHggI2ZmZixcbiAgICAgICAgICAgICAgIDAgMCA0cHggI2ZmZjtcbn1cblxuLnJzLWNvdW50ZXItaWQge1xuICBmb250LXdlaWdodDogMzAwO1xuICAtd2Via2l0LWJveC1vcmRpbmFsLWdyb3VwOiAwO1xuICAtd2Via2l0LW9yZGVyOiAwO1xuICBvcmRlcjogMDtcbiAgd2lkdGg6IDU0cHg7XG59XG5cbi5ycy1jb3VudGVyLXZhbHVlIHtcbiAgZm9udC13ZWlnaHQ6IDMwMDtcbiAgLXdlYmtpdC1ib3gtb3JkaW5hbC1ncm91cDogMTtcbiAgLXdlYmtpdC1vcmRlcjogMTtcbiAgb3JkZXI6IDE7XG4gIHRleHQtYWxpZ246IHJpZ2h0O1xuICB3aWR0aDogMzVweDtcbn1cblxuLnJzLWNhbnZhcyB7XG4gIC13ZWJraXQtYm94LW9yZGluYWwtZ3JvdXA6IDI7XG4gIC13ZWJraXQtb3JkZXI6IDI7XG4gIG9yZGVyOiAyO1xufVxuXG5AbWVkaWEgKG1pbi13aWR0aDogNDgwcHgpIHtcbiAgLnJzLWJhc2Uge1xuICAgIGxlZnQ6IDIwcHg7XG4gICAgdG9wOiAyMHB4O1xuICB9XG59XG4iXSwic291cmNlUm9vdCI6IiJ9 */
+    </style>
+    I/chromium(30999):
+    <script src="https://unpkg.com/aframe-event-set-component@5/dist/aframe-event-set-component.min.js"></script>
+    I/chromium(30999):
+    <script src="https://unpkg.com/aframe-layout-component@5.3.0/dist/aframe-layout-component.min.js"></script>
+    I/chromium(30999):
+    <script src="https://unpkg.com/aframe-template-component@3.2.1/dist/aframe-template-component.min.js"></script>
+    I/chromium(30999):
+    <script
+        src="https://unpkg.com/aframe-proxy-event-component@2.1.0/dist/aframe-proxy-event-component.min.js"></script>
+    I/chromium(30999):
+    I/chromium(30999): <!-- Propiedades Generales -->
+    I/chromium(30999):
+    <script id="link" type="text/html">
+I/chromium(30999):         <a-entity class="link" geometry="primitive: plane; height: 1; width: 1" material="src: ${thumb}" animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter" animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave" event-set__click="_target: #image-360; _delay: 300; material.src: ${src}" proxy-event="event: click; to: #image-360; as: fade" sound="on: click; src: #click-sound"></a-entity>
+I/chromium(30999):     </script>
+    I/chromium(30999):
+    <script id="circle" type="text/html">
+I/chromium(30999):         <a-entity class="circle" geometry="primitive: circle; height: 1; width: 1" material="src: ${thumb}" animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter" animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave" event-set__click="_target: #image-360; _delay: 300; material.src: ${src}" proxy-event="event: click; to: #image-360; as: fade" sound="on: click; src: #click-sound"></a-entity>
+I/chromium(30999):     </script>
+    I/chromium(30999):
+</head>
+I/chromium(30999):
+I/chromium(30999):
+
+<body>
+    I/chromium(30999): <a-scene inspector="" keyboard-shortcuts="" screenshot="" device-orientation-permission-ui=""
+        vr-mode-ui="">
+        I/chromium(30999): <!-- Cursor -->
+        I/chromium(30999): <a-entity camera="" look-controls="" position="" rotation="">
+            I/chromium(30999): <a-cursor id="cursor" color="white"
+                animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
+                animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
+                event-set__mouseenter="_event: mouseenter; color: springgreen;"
+                event-set__mouseleave="_event: mouseleave; color: white;" raycaster="objects: .link , .circle"
+                material="" cursor="" geometry="" position=""
+                fusing="0.09999999999999998 0.09999999999999998 0.09999999999999998 ">
+                I/chromium(30999): </a-cursor>
+            I/chromium(30999): </a-entity>
+        I/chromium(30999):
+        I/chromium(30999): <a-assets>
+            I/chromium(30999): <!-- Sonido -->
+            I/chromium(30999):
+            I/chromium(30999):
+            I/chromium(30999): <!------------------------------------ Imágenes ------------------------------------>
+            I/chromium(30999):
+            I/chromium(30999): <!-- Salir -->
+            I/chromium(30999): <img id="salir" src="assets/images/salir2.jpg">
+            I/chromium(30999):
+            I/chromium(30999): <!-- Mostrada al inicio -->
+            I/chromium(30999): <img id="inicio" src="assets/images/360/estacionamiento.jpg">
+            I/chromium(30999):
+            I/chromium(30999): <!-- 1 -->
+            I/chromium(30999): <img id="plazaidentidad" src="assets/images/360/plazaidentidad.jpg">
+            I/chromium(30999): <img id="plazaidentidads" src="assets/images/360/plazaidentidads.png">
+            I/chromium(30999): <img id="af" src="assets/images/360/af.jpg">
+            I/chromium(30999): <img id="afs" src="assets/images/360/afs.png">
+            I/chromium(30999): <img id="bf" src="assets/images/360/bf.jpg">
+            I/chromium(30999): <img id="bfs" src="assets/images/360/bfs.png">
+            I/chromium(30999): <img id="bd" src="assets/images/360/bd.jpg">
+            I/chromium(30999): <img id="bds" src="assets/images/360/bds.png">
+            I/chromium(30999): <img id="if" src="assets/images/360/if.jpg">
+            I/chromium(30999): <img id="ifs" src="assets/images/360/ifs.png">
+            I/chromium(30999):
+            I/chromium(30999): <!-- 2 -->
+            I/chromium(30999): <img id="i" src="assets/images/360/i.jpg">
+            I/chromium(30999): <img id="is" src="assets/images/360/is.png">
+            I/chromium(30999): <img id="canchas" src="assets/images/360/canchas.jpg">
+            I/chromium(30999): <img id="canchass" src="assets/images/360/canchass.png">
+            I/chromium(30999): <img id="estacionamiento" src="assets/images/360/estacionamiento.jpg">
+            I/chromium(30999): <img id="estacionamientos" src="assets/images/360/estacionamientos.png">
+            I/chromium(30999): <img id="cf" src="assets/images/360/cf.jpg">
+            I/chromium(30999): <img id="cfs" src="assets/images/360/cfs.png">
+            I/chromium(30999): <img id="jardincafe" src="assets/images/360/jardincafe.jpg">
+            I/chromium(30999): <img id="jardincafes" src="assets/images/360/jardincafes.png">
+            I/chromium(30999):
+            I/chromium(30999): <!-- 3 -->
+            I/chromium(30999): <img id="ef" src="assets/images/360/ef.jpg">
+            I/chromium(30999): <img id="efs" src="assets/images/360/efs.png">
+            I/chromium(30999): <img id="ed" src="assets/images/360/ed.jpg">
+            I/chromium(30999): <img id="eds" src="assets/images/360/eds.png">
+            I/chromium(30999): <img id="ff2" src="assets/images/360/ff2.jpg">
+            I/chromium(30999): <img id="ff2s" src="assets/images/360/ff2s.png">
+            I/chromium(30999): <img id="ff" src="assets/images/360/ff.jpg">
+            I/chromium(30999): <img id="ffs" src="assets/images/360/ffs.png">
+            I/chromium(30999): <img id="df" src="assets/images/360/df.jpg">
+            I/chromium(30999): <img id="dfs" src="assets/images/360/dfs.png">
+            I/chromium(30999):
+            I/chromium(30999): <!-- 4 -->
+            I/chromium(30999): <img id="mac" src="assets/images/360/mac.jpg">
+            I/chromium(30999): <img id="macs" src="assets/images/360/macs.png">
+            I/chromium(30999): <img id="d" src="assets/images/360/d.jpg">
+            I/chromium(30999): <img id="ds" src="assets/images/360/ds.png">
+            I/chromium(30999): <img id="h" src="assets/images/360/h.jpg">
+            I/chromium(30999): <img id="hs" src="assets/images/360/hs.png">
+            I/chromium(30999): <img id="hc" src="assets/images/360/hc.jpg">
+            I/chromium(30999): <img id="hcs" src="assets/images/360/hcs.png">
+            I/chromium(30999): <img id="biblioteca" src="assets/images/360/biblioteca.jpg">
+            I/chromium(30999): <img id="bibliotecas" src="assets/images/360/bibliotecas.png">
+            I/chromium(30999):
+            I/chromium(30999): <audio id="click-sound"
+                src="https://cdn.aframe.io/360-image-gallery-boilerplate/audio/click.ogg"
+                crossorigin="anonymous"></audio></a-assets>
+        I/chromium(30999):
+        I/chromium(30999): <!-- Imagenes -->
+        I/chromium(30999): <a-entity id="links" layout="type: line; margin: 1.3" position="-2 0 -4">
+            I/chromium(30999): <a-entity template="src: #link" data-src="#plazaidentidad"
+                data-thumb="#plazaidentidads"><a-entity class="link" geometry="primitive: plane; height: 1; width: 1"
+                    material="src: #plazaidentidads"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #plazaidentidad"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): <a-entity template="src: #link" data-src="#af" data-thumb="#afs"><a-entity class="link"
+                    geometry="primitive: plane; height: 1; width: 1" material="src: #afs"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #af"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): <a-entity template="src: #link" data-src="#bf" data-thumb="#bfs"><a-entity class="link"
+                    geometry="primitive: plane; height: 1; width: 1" material="src: #bfs"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #bf"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): <a-entity template="src: #link" data-src="#bd" data-thumb="#bds"><a-entity class="link"
+                    geometry="primitive: plane; height: 1; width: 1" material="src: #bds"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #bd"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): <a-entity template="src: #link" data-src="#if" data-thumb="#ifs"><a-entity class="link"
+                    geometry="primitive: plane; height: 1; width: 1" material="src: #ifs"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #if"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): </a-entity>
+        I/chromium(30999): <a-entity id="links" layout="type: line; margin: 1.3" position="-2 -1.3 -4"
+            rotation="-10 0 0">
+            I/chromium(30999): <a-entity template="src: #link" data-src="#i" data-thumb="#is"><a-entity class="link"
+                    geometry="primitive: plane; height: 1; width: 1" material="src: #is"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #i"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): <a-entity template="src: #link" data-src="#estacionamiento"
+                data-thumb="#estacionamientos"><a-entity class="link" geometry="primitive: plane; height: 1; width: 1"
+                    material="src: #estacionamientos"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #estacionamiento"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): <a-entity template="src: #link" data-src="#canchas" data-thumb="#canchass"><a-entity
+                    class="link" geometry="primitive: plane; height: 1; width: 1" material="src: #canchass"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #canchas"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): <a-entity template="src: #link" data-src="#cf" data-thumb="#cfs"><a-entity class="link"
+                    geometry="primitive: plane; height: 1; width: 1" material="src: #cfs"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #cf"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): <a-entity template="src: #link" data-src="#jardincafe"
+                data-thumb="#jardincafes"><a-entity class="link" geometry="primitive: plane; height: 1; width: 1"
+                    material="src: #jardincafes"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #jardincafe"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): </a-entity>
+        I/chromium(30999): <a-entity id="links" layout="type: line; margin: 1.3" position="-2 -2.6 -3.5"
+            rotation="-20 0 0">
+            I/chromium(30999): <a-entity template="src: #link" data-src="#ef" data-thumb="#efs"><a-entity class="link"
+                    geometry="primitive: plane; height: 1; width: 1" material="src: #efs"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #ef"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): <a-entity template="src: #link" data-src="#ed" data-thumb="#eds"><a-entity class="link"
+                    geometry="primitive: plane; height: 1; width: 1" material="src: #eds"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #ed"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): <a-entity template="src: #link" data-src="#ff2" data-thumb="#ff2s"><a-entity class="link"
+                    geometry="primitive: plane; height: 1; width: 1" material="src: #ff2s"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #ff2"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): <a-entity template="src: #link" data-src="#ff" data-thumb="#ffs"><a-entity class="link"
+                    geometry="primitive: plane; height: 1; width: 1" material="src: #ffs"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #ff"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): <a-entity template="src: #link" data-src="#df" data-thumb="#dfs"><a-entity class="link"
+                    geometry="primitive: plane; height: 1; width: 1" material="src: #dfs"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #df"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): </a-entity>
+        I/chromium(30999): <a-entity id="links" layout="type: line; margin: 1.3" position="-2 -3.4 -2.5"
+            rotation="-40 0 0">
+            I/chromium(30999): <a-entity template="src: #link" data-src="#mac" data-thumb="#macs"><a-entity class="link"
+                    geometry="primitive: plane; height: 1; width: 1" material="src: #macs"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #mac"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): <a-entity template="src: #link" data-src="#d" data-thumb="#ds"><a-entity class="link"
+                    geometry="primitive: plane; height: 1; width: 1" material="src: #ds"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #d"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): <a-entity template="src: #link" data-src="#h" data-thumb="#hs"><a-entity class="link"
+                    geometry="primitive: plane; height: 1; width: 1" material="src: #hs"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #h"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): <a-entity template="src: #link" data-src="#hc" data-thumb="#hcs"><a-entity class="link"
+                    geometry="primitive: plane; height: 1; width: 1" material="src: #hcs"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #hc"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): <a-entity template="src: #link" data-src="#biblioteca"
+                data-thumb="#bibliotecas"><a-entity class="link" geometry="primitive: plane; height: 1; width: 1"
+                    material="src: #bibliotecas"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #biblioteca"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): </a-entity>
+        I/chromium(30999): <a-entity id="links" layout="type: line; margin: 1.3" position="0 -10 -3" rotation="-70 0 0">
+            I/chromium(30999): <a-entity template="src: #circle" data-src="#" data-thumb="#salir"
+                onclick="window.location.href = 'index.php?s=1';"><a-entity class="circle"
+                    geometry="primitive: circle; height: 1; width: 1" material="src: #salir"
+                    animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter"
+                    animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave"
+                    event-set__click="_target: #image-360; _delay: 300; material.src: #"
+                    proxy-event="event: click; to: #image-360; as: fade"
+                    sound="on: click; src: #click-sound"></a-entity></a-entity>
+            I/chromium(30999): </a-entity>
+        I/chromium(30999):
+        I/chromium(30999): <!-- Escena Mostrada -->
+        I/chromium(30999): <a-sky id="image-360" src="#inicio"
+            animation__fade="property: components.material.material.color; type: color; from: #FFF; to: #000; dur: 300; startEvents: fade"
+            animation__fadeback="property: components.material.material.color; type: color; from: #000; to: #FFF; dur: 300; startEvents: animationcomplete__fade"
+            material="" geometry="" scale=""></a-sky>
+        I/chromium(30999): <canvas class="a-canvas a-grab-cursor" data-aframe-canvas="true" data-engine="three.js r147"
+            width="1528" height="720"></canvas>
+        <div class="a-loader-title" style="display: none;">Recorrido en 360° | TraveVR</div><a-entity light=""
+            data-aframe-default-light="" aframe-injected=""></a-entity><a-entity light="" position=""
+            data-aframe-default-light="" aframe-injected=""></a-entity>
+        <div class="a-enter-vr a-hidden" aframe-injected=""><button class="a-enter-vr-button"
+                title="Enter VR mode with a headset or fullscreen without" aframe-injected=""></button></div>
+        <div class="a-enter-ar a-hidden" aframe-injected=""><button class="a-enter-ar-button"
+                title="Enter AR mode with a headset or handheld device." aframe-injected=""></button></div>
+        <div class="a-orientation-modal a-hidden" aframe-injected=""><button aframe-injected="">Exit VR</button></div>
+    </a-scene>
+    I/chromium(30999):
+    I/chromium(30999):
+    I/chromium(30999): <div id="verBotonRV"></div>
+    <div id="verBotonRV"></div>
+</body>
+
+</html>", source: (1)

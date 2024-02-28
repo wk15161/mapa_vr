@@ -65,9 +65,9 @@ class WidgetsPantalla {
 
               // Función para quitar el cursor
               function quitarCursor() {
-                  var cursor = document.querySelector('#cursor');
+                  var cursor = document.getElementById('cursor');
                   if (cursor) {
-                      entidad.removeChild(cursor);
+                      cursor.remove();
                   }
               }
 
@@ -80,17 +80,16 @@ class WidgetsPantalla {
 
               // Función para volver a agregar el cursor
               function volverAagregarCursor() {
-                var cursor = document.createElement('a-cursor');
-                  cursor.setAttribute('id', 'cursor');
-                  cursor.setAttribute('color', 'rgba(255, 255, 255, 0.1)');
-                 cursor.setAttribute('animation_click', 'property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150');
-                 cursor.setAttribute('animationfusing', 'property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500');
-                 cursor.setAttribute('event-setmouseenter', '_event: mouseenter; color: rgba(255, 255, 255, 0.1);');
-                 cursor.setAttribute('event-set_mouseleave', '_event: mouseleave; color: rgba(255, 255, 255, 0.1);');
-                //cursor.setAttribute('raycaster', 'objects: .link , .circle');
-                cursor.setAttribute('raycaster', 'objects: .link, .circle; far: 10; interval: 100');
-                cursor.setAttribute('fusing', '0.09999999999999998 0.09999999999999998 0.09999999999999998');
-                  entidad.appendChild(cursor);
+                 var cursor = document.createElement('a-cursor');
+                 cursor.setAttribute('id', 'cursor');
+                  cursor.setAttribute('scale', '0.1 0.1 0.1');
+                  cursor.setAttribute('animation_click', 'property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150');
+                  cursor.setAttribute('animationfusing', 'property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500');
+                  cursor.setAttribute('event-setmouseenter', '_event: mouseenter; color: springgreen;');
+                  cursor.setAttribute('event-set_mouseleave', '_event: mouseleave; color: rgba(255, 255, 255, 0.1);');
+                  cursor.setAttribute('raycaster', 'objects: .link , .circle');
+                 // cursor.setAttribute('raycaster', 'objects: .link, .circle; far: 10; interval: 100');
+                 entidad.appendChild(cursor);
               }
 
               function volverAagregarCursor1() {
@@ -99,30 +98,35 @@ class WidgetsPantalla {
                   cursor.setAttribute('color', 'rgba(255, 255, 255, 0.1)');
                   entidad.appendChild(cursor);
               }  
+              function volverAagregarCursor2() {
+                var cursor = document.createElement('a-cursor');
+                  cursor.setAttribute('id', 'cursor');
+                  cursor.setAttribute('scale', '0.5 0.5 0.5');
+                  alert("sip");
+                  entidad.appendChild(cursor);
+              }  
 
               function establecerColor(){
                 if(document.getElementById('cursor')){
-                var cursor = document.getElementById('cursor');
-                 cursor.setAttribute('color', 'rgba(255, 255, 255, 0.1);');
-                 cursor.setAttribute('event-setmouseenter', '_event: mouseenter; rgba(255, 255, 255, 0.1);');
-                 cursor.setAttribute('event-set_mouseleave', '_event: mouseleave; rgba(255, 255, 255, 0.1);');
+                  var cursor = document.getElementById('cursor');
+
+                  cursor.removeAttribute('animation_click');
+                  cursor.removeAttribute('animationfusing');
+                  cursor.removeAttribute('event-setmouseenter');
+                  cursor.removeAttribute('event-set_mouseleave');
+                  cursor.removeAttribute('raycaster');
+
+                  cursor.setAttribute('scale', '0.06 0.06 0.06');
+                  cursor.setAttribute('color', 'rgba(255, 255, 255, 0.1);');
+                  cursor.setAttribute('animation_click', 'property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150');
+                  cursor.setAttribute('animationfusing', 'property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500');
+                  cursor.setAttribute('event-setmouseenter', '_event: mouseenter; color: springgreen;');
+                  cursor.setAttribute('event-set_mouseleave', '_event: mouseleave; color: rgba(255, 255, 255, 0.1);');
+                  cursor.setAttribute('raycaster', 'objects: .link , .circle');
                 }
               }
 
-              //funcion agregar propiedad circle
-
-              function agregarCircle(){
-                 // Crear un nuevo script con el id "circle"
-                var nuevoScript = document.createElement('script');
-                nuevoScript.setAttribute('id', 'circle');
-                nuevoScript.setAttribute('type', 'text/html');
-                nuevoScript.innerHTML = `
-                   <a-entity class="circle" geometry="primitive: circle; radius: 1" material="src: \${thumb}" animation__mouseenter="property: scale; to: 1.5 1.5 1.5; dur: 300; startEvents: mouseenter" animation__mouseleave="property: scale; to: 1 1 1; dur: 300; startEvents: mouseleave" event-set__click="_target: #image-360; _delay: 300; material.src: \${src}" proxy-event="event: click; to: #image-360; as: fade" sound="on: click; src: #click-sound"></a-entity>
-               `;
-
-                // Agregar el nuevo script al cuerpo del documento o a la cabeza según tu estructura HTML
-               document.head.appendChild(nuevoScript);
-              }
+             
            ''');
         },
         icon: const Icon(
@@ -185,6 +189,30 @@ class WidgetsPantalla {
     );
   }
 
+  Widget establecerJscript(bool mostrarBoton, WebViewController? controller) {
+    return Visibility(
+      visible: mostrarBoton,
+      child: IconButton(
+        onPressed: () async {
+          await controller!.runJavaScript('''
+            var miEscena = document.querySelector('a-scene');
+
+            if (miEscena) {
+              // Agrega el nuevo atributo vr-mode-ui="enabled: true"
+              miEscena.setAttribute('vr-mode-ui', 'enabled: true');
+                 
+            }  
+           ''');
+        },
+        icon: const Icon(
+          Icons.javascript,
+          size: 40,
+          color: Color.fromARGB(255, 4, 97, 58),
+        ),
+      ),
+    );
+  }
+
   Widget botonAgregarCursor(bool mostrarBoton, WebViewController? controller) {
     return Visibility(
       visible: mostrarBoton,
@@ -194,8 +222,8 @@ class WidgetsPantalla {
           // Cambiar la URL del WebView
 
           await controller!.runJavaScript('''
-           volverAagregarCursor(); // Volver a agregar el cursor
-            // establecerColor();
+          // volverAagregarCursor(); // Volver a agregar el cursor
+          establecerColor();
            ''');
         },
         icon: const Icon(
